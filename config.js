@@ -8,10 +8,10 @@
  *  - Si pones un enlace de afiliado, aparece automáticamente la sección de divulgación.
  */
 window.CUENTA_VIVA_CONFIG = {
-  // Checkout principal (Polar.sh). Ej.: "https://polar.sh/…/checkout/…"
-  CHECKOUT_URL: "", // Polar negó el acceso a pagos (1-oct-2026). Link anterior: https://buy.polar.sh/polar_cl_HDs7Owasy2d98lZSwgwKbf179Ud4a8zd9mByG1FXVN5
+  // Link de pago de Hotmart (único procesador). Ej.: "https://pay.hotmart.com/…"
+  CHECKOUT_URL: "",
 
-  // Checkout alternativo LatAm (Hotmart). Opcional.
+  // Segundo checkout opcional. Sin uso: todo el cobro va por Hotmart.
   CHECKOUT_URL_LATAM: "",
 
   // Versión LITE gratuita de la hoja (archivo dentro de site/descargas/).
