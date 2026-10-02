@@ -9,7 +9,7 @@
  */
 window.CUENTA_VIVA_CONFIG = {
   // Checkout principal (Polar.sh). Ej.: "https://polar.sh/…/checkout/…"
-  CHECKOUT_URL: "",
+  CHECKOUT_URL: "https://buy.polar.sh/polar_cl_HDs7Owasy2d98lZSwgwKbf179Ud4a8zd9mByG1FXVN5",
 
   // Checkout alternativo LatAm (Hotmart). Opcional.
   CHECKOUT_URL_LATAM: "",
