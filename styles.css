@@ -1,3 +1,12 @@
+/* Tipografía: Bricolage Grotesque (títulos y cifras grandes), Figtree (texto e interfaz),
+   Newsreader itálica (la voz humana: compañero y voz interior). Todas OFL, servidas desde /fonts. */
+@font-face { font-family: "Figtree"; src: url("fonts/figtree.woff2") format("woff2"); font-weight: 300 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("fonts/bricolage.woff2") format("woff2"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("fonts/newsreader-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+/* Fallbacks con métricas parecidas para evitar saltos al cargar */
+@font-face { font-family: "Figtree Fallback"; src: local("Segoe UI"), local("Roboto"), local("Arial"); size-adjust: 101%; ascent-override: 95%; descent-override: 25%; }
+@font-face { font-family: "Bricolage Fallback"; src: local("Segoe UI Semibold"), local("Roboto"), local("Arial"); size-adjust: 98%; ascent-override: 92%; descent-override: 26%; }
+
 /* Cuenta Viva — estilos. Sin dependencias. Oscuro por defecto, claro según el sistema. */
 
 :root {
@@ -29,8 +38,9 @@
   --shadow-1: 0 1px 2px rgba(0, 0, 0, .35);
   --shadow-2: 0 2px 4px rgba(0, 0, 0, .3), 0 10px 16px -10px rgba(0, 0, 0, .55);
 
-  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --font-num: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font: "Figtree", "Figtree Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "Bricolage Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-voice: "Newsreader", Georgia, "Times New Roman", serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Consolas, monospace;
 
   --r-sm: 8px;
@@ -76,7 +86,9 @@ body {
   color: var(--text);
   font-family: var(--font);
   font-size: 16px;
-  line-height: 1.55;
+  line-height: 1.6;
+  letter-spacing: 0.003em;
+  font-kerning: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   caret-color: var(--green);
@@ -85,7 +97,8 @@ body {
 }
 ::selection { background: color-mix(in srgb, var(--green) 35%, transparent); color: var(--text); }
 img, svg { display: block; max-width: 100%; }
-h1, h2, h3 { line-height: 1.12; letter-spacing: -0.022em; margin: 0; text-wrap: balance; font-weight: 720; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.08; letter-spacing: -0.025em; margin: 0; text-wrap: balance; font-weight: 700; }
+h3 { line-height: 1.2; letter-spacing: -0.012em; font-weight: 650; }
 p { margin: 0; text-wrap: pretty; }
 a { color: var(--green-ink); text-underline-offset: .2em; text-decoration-thickness: 1px; }
 a:hover { text-decoration-thickness: 2px; }
@@ -105,7 +118,7 @@ a:hover { text-decoration-thickness: 2px; }
 /* ---------- Header ---------- */
 .site-header { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--line); }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 720; letter-spacing: -0.015em; font-size: 17px; }
+.brand { font-family: var(--font-display); display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 720; letter-spacing: -0.015em; font-size: 17px; }
 .brand svg { width: 28px; height: 28px; }
 .nav { display: flex; align-items: center; gap: 4px; }
 .nav a { color: var(--text-2); text-decoration: none; font-size: 15px; padding: 8px 10px; border-radius: var(--r-sm); }
@@ -218,7 +231,7 @@ a:hover { text-decoration-thickness: 2px; }
 .lamp .l-verde.on { background: var(--green); color: #03130A; box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 25%, transparent); }
 @media (min-width: 640px) { .lamp span { width: 36px; height: 36px; } .lamp span svg { width: 20px; height: 20px; } }
 
-.signal-title { font-size: clamp(1.6rem, 1.3rem + 1.4vw, 2.15rem); font-weight: 760; letter-spacing: -0.03em; line-height: 1.05; color: var(--ink); }
+.signal-title { font-family: var(--font-display); font-size: clamp(1.6rem, 1.3rem + 1.4vw, 2.15rem); font-weight: 760; letter-spacing: -0.03em; line-height: 1.05; color: var(--ink); }
 .signal-msg { margin-top: 8px; color: var(--text-2); font-size: 15px; line-height: 1.45; }
 .signal-msg strong { color: var(--text); font-weight: 650; }
 
@@ -227,13 +240,13 @@ a:hover { text-decoration-thickness: 2px; }
 @media (min-width: 640px) { .lot { padding: 20px 24px; } }
 .lot-main { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .metric-label { font-size: 12.5px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
-.lot-value { font-size: clamp(2.5rem, 2rem + 2.2vw, 3.4rem); font-weight: 760; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums; }
+.lot-value { font-family: var(--font-display); font-size: clamp(2.5rem, 2rem + 2.2vw, 3.4rem); font-weight: 760; letter-spacing: -0.035em; line-height: 1; font-variant-numeric: tabular-nums; }
 .lot-value small { font-size: .4em; font-weight: 600; letter-spacing: 0; color: var(--text-2); margin-left: 6px; }
 .lot-sub { color: var(--text-2); font-size: 14.5px; }
 .metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
 .metric { padding: 14px 0 0; display: grid; gap: 4px; }
 .metric + .metric { padding-left: 16px; border-left: 1px solid var(--line); }
-.metric-value { font-size: 1.6rem; font-weight: 720; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.metric-value { font-family: var(--font-display); font-size: 1.6rem; font-weight: 720; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .metric-value small { font-size: .55em; color: var(--text-2); font-weight: 600; letter-spacing: 0; margin-left: 4px; }
 .metric-note { font-size: 13px; color: var(--text-3); line-height: 1.35; }
 
@@ -334,7 +347,7 @@ a:hover { text-decoration-thickness: 2px; }
 .ticks-list li { display: flex; gap: 10px; align-items: flex-start; color: var(--text); }
 .ticks-list .icon { color: var(--green-ink); margin-top: 2px; }
 .price { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.price .now { font-size: 2.6rem; font-weight: 760; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; line-height: 1; }
+.price .now { font-family: var(--font-display); font-size: 2.6rem; font-weight: 760; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; line-height: 1; }
 .price .now small { font-size: .42em; color: var(--text-2); font-weight: 650; margin-right: 4px; letter-spacing: 0; }
 .price .was { color: var(--text-3); text-decoration: line-through; font-variant-numeric: tabular-nums; }
 .price .tag-launch { font-size: 13px; font-weight: 650; color: var(--amber-ink); }
@@ -483,24 +496,39 @@ table.data td { color: var(--text-2); }
 .articles a:hover strong .icon { transform: translateX(3px); color: var(--green-ink); }
 
 /* Voz del compañero (bajo el semáforo) */
-.kicker { font-size: 13px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
-.signal-voice { margin-top: 12px; padding-top: 12px; border-top: 1px dashed color-mix(in srgb, var(--c) 35%, var(--line)); color: var(--text); font-size: 15px; line-height: 1.5; font-style: italic; }
-.signal-voice .voice-next { font: inherit; font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--ink); background: none; border: 1px solid color-mix(in srgb, var(--c) 40%, var(--line)); border-radius: 999px; padding: 2px 10px; margin-left: 4px; cursor: pointer; vertical-align: 1px; }
+.signal-voice { margin-top: 14px; padding-top: 12px; border-top: 1px solid color-mix(in srgb, var(--c) 28%, var(--line)); display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.signal-voice .voice-text { flex: 1 1 22ch; font-family: var(--font-voice); font-style: italic; font-size: 1.08rem; line-height: 1.45; color: var(--text); letter-spacing: 0.005em; }
+.signal-voice .voice-next { flex: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: none; border: 1px solid color-mix(in srgb, var(--c) 40%, var(--line)); border-radius: 999px; padding: 3px 12px; cursor: pointer; }
 .signal-voice .voice-next:hover { background: color-mix(in srgb, var(--c) 12%, transparent); }
 .signal-voice .voice-next:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 /* En ROJO o cuenta violada no se vende nada */
 body.cv-pausa [data-sell], body.cv-pausa [data-affiliates] { display: none !important; }
 
-/* Kit: momentos, historia */
-.moments { display: grid; gap: 14px; margin-top: 22px; grid-template-columns: 1fr; }
-@media (min-width: 720px) { .moments { grid-template-columns: 1fr 1fr; } }
-.moment { padding: 18px 20px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); }
-.m-when { font-size: 12.5px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--green); }
-.m-voice { margin-top: 8px; font-size: 1.15rem; font-style: italic; color: var(--text); line-height: 1.35; }
-.m-kit { margin-top: 10px; color: var(--text-2); font-size: 15px; line-height: 1.5; }
-.m-kit strong { color: var(--text); }
-.source-note { margin-top: 16px; font-size: 13.5px; color: var(--text-2); line-height: 1.5; }
-.source-note a { color: inherit; text-decoration: underline; }
-.story-text p + p { margin-top: 12px; }
-.story-text .family { margin-top: 20px; padding: 16px 18px; border-left: 3px solid var(--green); background: var(--surface); border-radius: 0 var(--r-lg) var(--r-lg) 0; }
-.story-text .family p + p { margin-top: 6px; }
+/* Kit: los momentos como una conversación (voz interior → respuesta del Kit) */
+.moments { margin-top: 28px; border-top: 1px solid var(--line); }
+.moment { display: grid; gap: 6px 32px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+@media (min-width: 760px) { .moment { grid-template-columns: 11rem 1fr 1fr; align-items: baseline; padding: 26px 0; } }
+.m-when { font-size: 14px; font-weight: 650; color: var(--green-ink); letter-spacing: 0; }
+.m-voice { font-family: var(--font-voice); font-style: italic; font-size: clamp(1.25rem, 1.1rem + .6vw, 1.55rem); line-height: 1.3; color: var(--text); }
+.m-kit { color: var(--text-2); font-size: 15.5px; line-height: 1.55; max-width: 46ch; }
+.m-kit strong { color: var(--text); font-weight: 650; }
+.source-note { margin-top: 18px; font-size: 13.5px; color: var(--text-3); line-height: 1.55; max-width: 72ch; }
+.source-note a { color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Historia */
+.story-text { font-size: 1.06rem; line-height: 1.65; max-width: 62ch; }
+.story-text p + p { margin-top: 14px; }
+.story-text .family { margin-top: 24px; padding: 18px 20px; border: 1px solid color-mix(in srgb, var(--green) 30%, var(--line)); background: color-mix(in srgb, var(--green) 6%, var(--surface)); border-radius: var(--r-lg); font-size: 15.5px; }
+.story-text .family .m-when { margin-bottom: 6px; }
+
+/* Superficies del navegador con la paleta */
+::selection { background: color-mix(in srgb, var(--green) 35%, transparent); color: var(--text); }
+html { caret-color: var(--green); accent-color: var(--green); }
+
+/* Campos con unidad en pantallas angostas: que el número completo quepa */
+.control input { letter-spacing: -0.01em; }
+@media (max-width: 420px) {
+  .control input, .control select { padding-left: 11px; }
+  .control .unit { right: 9px; font-size: 12.5px; }
+  .control.has-unit input { padding-right: 40px; }
+}
