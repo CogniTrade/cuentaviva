@@ -33,7 +33,7 @@
       a.className = 'btn btn-primary';
       a.href = cfg.CHECKOUT_URL.trim();
       a.rel = 'noopener';
-      a.innerHTML = 'Comprar el kit · USD ' + (cfg.PRECIO_LANZAMIENTO || 9) +
+      a.innerHTML = 'Comprar el kit · USD ' + (cfg.PRECIO_LANZAMIENTO || 15) +
         '<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>';
       main.replaceWith(a);
       if (soon) soon.hidden = true;
@@ -45,7 +45,7 @@
     } else if (wait && isHttps(cfg.WAITLIST_URL)) {
       wait.href = cfg.WAITLIST_URL.trim();
       wait.hidden = false;
-      if (soon) soon.textContent = 'Todavía no está a la venta. Déjanos tu correo en la lista de espera y te avisamos el día del lanzamiento, con el precio de USD ' + (cfg.PRECIO_LANZAMIENTO || 9) + '.';
+      if (soon) soon.textContent = 'Todavía no está a la venta. Déjanos tu correo en la lista de espera y te avisamos el día del lanzamiento, con el precio de USD ' + (cfg.PRECIO_LANZAMIENTO || 15) + '.';
     }
   });
 
