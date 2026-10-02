@@ -203,6 +203,12 @@
       refTexto: 'el mayor entre balance y equity al cierre del día anterior',
       reset: '00:00 hora del servidor'
     },
+    fundingpips2: {
+      nombre: 'FundingPips 2 Step Standard', corto: 'FundingPips', ddDiario: 5, baseDd: 'referencia', ddMax: 10, tipo: 'estatica',
+      objF1: 8, objF2: 5, diasMin: 3, diasTexto: '3 días operados por fase. Al comprar eliges pérdida diaria de 5 % o 3 %: si elegiste 3 %, cámbiala abajo',
+      refTexto: 'el mayor entre balance y equity al inicio del día',
+      reset: '00:00 hora de la plataforma (UTC+3)'
+    },
     custom: {
       nombre: 'Personalizada', corto: 'tu firma', ddDiario: 5, baseDd: 'inicial', ddMax: 10, tipo: 'estatica',
       objF1: 10, objF2: 5, diasMin: 0, diasTexto: '',
