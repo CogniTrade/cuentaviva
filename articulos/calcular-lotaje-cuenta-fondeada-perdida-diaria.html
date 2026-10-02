@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cómo calcular el lotaje en una cuenta fondeada sin violar la pérdida diaria | Cuenta Viva</title>
+<meta name="description" content="Fórmula de lotaje para cuentas fondeadas con ejemplos en EURUSD, oro y NAS100, y cómo comprobar que un stop completo no rompe tu pérdida diaria.">
+<link rel="canonical" href="https://cognitrade.github.io/cuentaviva/articulos/calcular-lotaje-cuenta-fondeada-perdida-diaria.html">
+<meta name="theme-color" content="#0E1116" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F5F7" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="es_LA">
+<meta property="og:site_name" content="Cuenta Viva">
+<meta property="og:title" content="Cómo calcular el lotaje en una cuenta fondeada sin violar la pérdida diaria">
+<meta property="og:description" content="Fórmula de lotaje para cuentas fondeadas con ejemplos en EURUSD, oro y NAS100, y cómo comprobar que un stop completo no rompe tu pérdida diaria.">
+<meta property="og:url" content="https://cognitrade.github.io/cuentaviva/articulos/calcular-lotaje-cuenta-fondeada-perdida-diaria.html">
+<meta property="og:image" content="https://cognitrade.github.io/cuentaviva/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Cómo calcular el lotaje en una cuenta fondeada sin violar la pérdida diaria",
+  "description": "Fórmula de lotaje para cuentas fondeadas con ejemplos en EURUSD, oro y NAS100, y cómo comprobar que un stop completo no rompe tu pérdida diaria.",
+  "inLanguage": "es",
+  "datePublished": "2026-10-01",
+  "dateModified": "2026-10-01",
+  "mainEntityOfPage": "https://cognitrade.github.io/cuentaviva/articulos/calcular-lotaje-cuenta-fondeada-perdida-diaria.html",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Cuenta Viva",
+    "url": "https://cognitrade.github.io/cuentaviva/"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Cuenta Viva"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cuántos lotes puedo usar en una cuenta de 100 000 de FTMO?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depende de tu stop y del instrumento, no del tamaño de la cuenta. Con 500 USD de riesgo y 25 pips de stop en EURUSD son 2,00 lotes; con 6,00 USD de stop en oro son 0,83 lotes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuánto vale un punto del oro por lote?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "En la mayoría de brókers, 1 lote = 100 onzas, así que 1,00 USD de movimiento = 100 USD por lote. Confírmalo en la especificación del contrato de tu plataforma."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué mi lotaje en NAS100 no coincide con el de otro trader?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque el valor por punto del índice depende del bróker. Puede variar de 0,1 a 20 USD por punto por lote."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Debo calcular el lote con el balance inicial o con el actual?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El riesgo puede definirse sobre el inicial, pero el lote final tiene que caber en el colchón de hoy: equity actual menos el piso más alto entre el diario y el máximo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es el lote máximo seguro?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El lote más grande con el que, si salta tu stop completo, todavía no tocas el piso. No es un objetivo: es un tope."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+<a class="skip" href="#main">Saltar al contenido</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="Cuenta Viva, inicio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+      Cuenta Viva
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="../">Calculadora</a>
+      <a href="../kit.html" class="nav-cta">Kit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="wrap doc article">
+    <h1>Cómo calcular el lotaje en una cuenta fondeada sin violar la pérdida diaria</h1>
+    <p class="updated">Reglas verificadas el 1 de octubre de 2026</p>
+    <div class="prose">
+<blockquote class="note">No es asesoría financiera. Las reglas de cada firma cambian: verifica siempre en la web oficial. El valor por punto depende de tu bróker: revísalo en la especificación del contrato de tu plataforma.</blockquote>
+<p>El lotaje es el único número que decides tú en cada operación. Y es donde se pierden más cuentas por pura aritmética: un decimal mal puesto en el oro, un índice con un valor por punto distinto al que creías, o un lote "normal" en un día en que ya no te quedaba colchón.</p>
+<p>Aquí tienes la fórmula, tres ejemplos en instrumentos distintos y el paso que casi nadie hace: comprobar el lote contra tu <strong>pérdida diaria</strong> de hoy, no contra tu cuenta en general.</p>
+<h2>La fórmula base</h2>
+<pre class="code"><code>lote = riesgo_en_USD / (distancia_del_stop × valor_por_punto_por_lote)</code></pre>
+<ul><li><strong>riesgo_en_USD:</strong> lo que aceptas perder si salta el stop. Por ejemplo, 0,5 % de una cuenta de 100 000 = 500 USD.</li><li><strong>distancia_del_stop:</strong> en pips (forex) o puntos (oro, índices), medida desde tu entrada.</li><li><strong>valor_por_punto_por_lote:</strong> cuántos USD gana o pierde <strong>1 lote</strong> por cada pip o punto. Este es el número que más errores causa.</li></ul>
+<p>Siempre redondea el lote <strong>hacia abajo</strong> al paso que permite tu plataforma (normalmente 0,01).</p>
+<h2>Ejemplo 1: EURUSD</h2>
+<ul><li>Riesgo: 500 USD</li><li>Stop: 25 pips</li><li>Valor del pip por lote estándar en EURUSD: unos 10 USD</li></ul>
+<pre class="code"><code>lote = 500 / (25 × 10) = 500 / 250 = 2,00 lotes</code></pre>
+<p>Forex con cotización en USD es el caso fácil. En pares como USDJPY el valor del pip cambia con el precio (ronda los 6,5 USD por lote, pero varía), así que compruébalo en tu plataforma.</p>
+<h2>Ejemplo 2: oro (XAUUSD), donde se rompen cuentas</h2>
+<p>En la mayoría de brókers, 1 lote de oro son 100 onzas: <strong>cada 1,00 USD que se mueve el precio son 100 USD por lote.</strong></p>
+<ul><li>Riesgo: 500 USD</li><li>Stop: 6,00 USD de precio (de 2 400,00 a 2 394,00, por ejemplo)</li><li>Valor por 1,00 USD de movimiento por lote: 100 USD</li></ul>
+<pre class="code"><code>lote = 500 / (6 × 100) = 500 / 600 = 0,833 → 0,83 lotes</code></pre>
+<p><strong>El error típico:</strong> tratar el oro como el EURUSD y suponer 10 USD por "pip" de 1,00. Entonces calculas:</p>
+<pre class="code"><code>lote = 500 / (6 × 10) = 8,33 lotes</code></pre>
+<p>Riesgo real con 8,33 lotes: 8,33 × 6 × 100 = <strong>4 998 USD</strong>. Un solo stop se come casi toda la pérdida diaria de una cuenta de 100 000 en FTMO. Y si el stop desliza un poco, la viola.</p>
+<p>Otra fuente de confusión: algunas plataformas muestran la distancia en "puntos" de 0,01. Un stop de 6,00 USD puede aparecer como 600 puntos. Usa siempre la misma unidad en la distancia y en el valor por punto.</p>
+<h2>Ejemplo 3: NAS100 y otros índices</h2>
+<p>Aquí no hay una respuesta única. El valor por punto de 1 lote de NAS100, US30 o US500 <strong>cambia mucho entre brókers</strong>: puede ser 0,1, 1, 10 o 20 USD por punto, según cómo definan el contrato.</p>
+<ul><li>Riesgo: 500 USD</li><li>Stop: 50 puntos</li></ul>
+<div class="table-wrap"><table class="data"><thead><tr><th>Valor por punto por lote</th><th>Lote correcto</th></tr></thead><tbody><tr><td>1 USD</td><td>500 / (50 × 1) = 10,00 lotes</td></tr><tr><td>10 USD</td><td>500 / (50 × 10) = 1,00 lote</td></tr><tr><td>20 USD</td><td>500 / (50 × 20) = 0,50 lotes</td></tr></tbody></table></div>
+<p>Si usas 10 lotes pensando en 1 USD por punto y tu bróker paga 20, un stop de 50 puntos te cuesta <strong>10 000 USD</strong>: el doble de la pérdida diaria de una cuenta de 100 000. Antes de operar un índice, abre la especificación del contrato en tu plataforma (o haz una prueba con 0,01 lotes y mira cuánto se mueve el flotante por punto).</p>
+<h2>El paso que falta: comprobar contra la pérdida diaria de HOY</h2>
+<p>Calcular el lote por riesgo está bien. Pero tu riesgo tiene que caber en el <strong>colchón</strong> que te queda hoy, que no siempre es 5 000.</p>
+<p>Tomemos FTMO 2-Step (pérdida diaria: 5 % del capital inicial, medida desde el balance a las 00:00 CE(S)T, con el flotante incluido; pérdida máxima: 10 % estática).</p>
+<ul><li>Capital inicial: 100 000</li><li>Balance a las 00:00 CE(S)T: 100 000 → piso diario 95 000</li><li>Hoy ya cerraste −3 700. Equity: 96 300</li><li><strong>Colchón: 96 300 − 95 000 = 1 300 USD</strong></li></ul>
+<p>Con tu riesgo habitual de 500 USD:</p>
+<ul><li>Stops completos que te quedan: 1 300 / 500 = <strong>2</strong> (redondeando hacia abajo)</li><li>Lote de oro por riesgo (stop de 6,00): 0,83 lotes</li><li><strong>Lote máximo seguro</strong> (el lote con el que un stop completo todavía no viola): 1 300 / 600 = 2,16 lotes</li></ul>
+<p>El lote de 0,83 cabe. Pero con dos stops más estás fuera. Este es el momento de bajar el riesgo o parar, no de "recuperar".</p>
+<p>Ahora otro día: ya perdiste −4 600. Colchón: <strong>400 USD</strong>. Tu riesgo de 500 ya no cabe: un stop completo te saca. La respuesta correcta aquí no es "bajo a 0,66 lotes para que quepa justo", es <strong>no operar más hoy</strong>. Un colchón de 400 USD no tiene margen para spread, comisión ni deslizamiento.</p>
+<blockquote class="note">Nota para The5ers High Stakes: ahí el 5 % diario se calcula sobre la referencia del inicio del día (el mayor entre balance y equity al cierre del día anterior), no sobre el capital inicial. El piso cambia; el método es el mismo.</blockquote>
+<h2>Un semáforo simple</h2>
+<p>Usa tu colchón y tu riesgo por operación (R):</p>
+<ul><li><strong>Verde:</strong> colchón ≥ 3 × R. Puedes operar con tu plan normal.</li><li><strong>Ámbar:</strong> colchón entre R y 3 × R. Reduce el riesgo.</li><li><strong>Rojo:</strong> colchón &lt; R. Detente hoy.</li></ul>
+<p>La <a href="../">calculadora gratuita de Cuenta Viva</a> hace exactamente esto: eliges la firma, el instrumento (EURUSD, oro, índices o personalizado, con el valor por punto editable), metes tu stop y tu riesgo, y te da el lote sugerido, el lote máximo seguro, cuántos stops te quedan y el semáforo. No pide registro.</p>
+<h2>Errores que la fórmula no arregla</h2>
+<ul><li><strong>Varias posiciones a la vez.</strong> Si abres tres operaciones, el riesgo que tiene que caber en el colchón es la suma de los tres stops.</li><li><strong>Stops que no son stops.</strong> Un "stop mental" no protege tu pérdida diaria. Si no está en la plataforma, tu riesgo es ilimitado.</li><li><strong>Noticias y aperturas.</strong> El spread se abre y el precio salta. Deja margen: si tu colchón es justo un stop, no es suficiente.</li><li><strong>Comisiones y swaps.</strong> En FTMO entran en la equity que se compara con el piso. Réstalas de tu colchón.</li><li><strong>Subir lote después de una pérdida.</strong> Es la forma más rápida de convertir un mal día en una cuenta perdida.</li></ul>
+<h2>Preguntas frecuentes</h2>
+<div class="faq">
+<details><summary>¿Cuántos lotes puedo usar en una cuenta de 100 000 de FTMO?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>Depende de tu stop y del instrumento, no del tamaño de la cuenta. Con 500 USD de riesgo y 25 pips de stop en EURUSD son 2,00 lotes; con 6,00 USD de stop en oro son 0,83 lotes.</p></div></details>
+<details><summary>¿Cuánto vale un punto del oro por lote?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>En la mayoría de brókers, 1 lote = 100 onzas, así que 1,00 USD de movimiento = 100 USD por lote. Confírmalo en la especificación del contrato de tu plataforma.</p></div></details>
+<details><summary>¿Por qué mi lotaje en NAS100 no coincide con el de otro trader?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>Porque el valor por punto del índice depende del bróker. Puede variar de 0,1 a 20 USD por punto por lote.</p></div></details>
+<details><summary>¿Debo calcular el lote con el balance inicial o con el actual?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>El riesgo puede definirse sobre el inicial, pero el lote final tiene que caber en el colchón de hoy: equity actual menos el piso más alto entre el diario y el máximo.</p></div></details>
+<details><summary>¿Qué es el lote máximo seguro?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>El lote más grande con el que, si salta tu stop completo, todavía no tocas el piso. No es un objetivo: es un tope.</p></div></details>
+</div>
+<hr>
+<p><em>Herramienta mencionada: <a href="../">Calculadora Cuenta Viva</a> (gratis). Este artículo no contiene enlaces de afiliado.</em></p>
+    </div>
+    <aside class="article-cta" aria-label="Calculadora">
+      <p><strong>Haz la cuenta con tus números.</strong> La calculadora de Cuenta Viva te da pisos, colchón, lote y semáforo en segundos. Gratis y sin registro.</p>
+      <a class="btn btn-primary" href="../">Abrir la calculadora<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </aside>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="brand" href="../">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+        Cuenta Viva
+      </a>
+      <ul class="foot-links">
+        <li><a href="../">Calculadora</a></li>
+        <li><a href="../kit.html">Kit Cuenta Viva</a></li>
+        <li><a href="../privacidad.html">Privacidad</a></li>
+        <li><a href="../terminos.html">Términos</a></li>
+      </ul>
+    </div>
+    <p>Mantén tu cuenta fondeada viva. Herramientas de control de riesgo; no vendemos señales ni estrategias. Cuenta Viva no está afiliada a FTMO, FundedNext ni The5ers salvo donde se indique.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drawdown diario en FTMO: cómo se calcula (con ejemplos) | Cuenta Viva</title>
+<meta name="description" content="Cómo calcula FTMO la pérdida diaria máxima: balance a las 00:00 CE(S)T, flotante incluido, ejemplos con números y el error que más cuentas quema.">
+<link rel="canonical" href="https://cognitrade.github.io/cuentaviva/articulos/como-se-calcula-drawdown-diario-ftmo.html">
+<meta name="theme-color" content="#0E1116" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F5F7" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="es_LA">
+<meta property="og:site_name" content="Cuenta Viva">
+<meta property="og:title" content="Cómo se calcula el drawdown diario en FTMO (con ejemplos)">
+<meta property="og:description" content="Cómo calcula FTMO la pérdida diaria máxima: balance a las 00:00 CE(S)T, flotante incluido, ejemplos con números y el error que más cuentas quema.">
+<meta property="og:url" content="https://cognitrade.github.io/cuentaviva/articulos/como-se-calcula-drawdown-diario-ftmo.html">
+<meta property="og:image" content="https://cognitrade.github.io/cuentaviva/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Cómo se calcula el drawdown diario en FTMO (con ejemplos)",
+  "description": "Cómo calcula FTMO la pérdida diaria máxima: balance a las 00:00 CE(S)T, flotante incluido, ejemplos con números y el error que más cuentas quema.",
+  "inLanguage": "es",
+  "datePublished": "2026-10-01",
+  "dateModified": "2026-10-01",
+  "mainEntityOfPage": "https://cognitrade.github.io/cuentaviva/articulos/como-se-calcula-drawdown-diario-ftmo.html",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Cuenta Viva",
+    "url": "https://cognitrade.github.io/cuentaviva/"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Cuenta Viva"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿La pérdida diaria de FTMO se calcula sobre el balance o sobre la equity?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La referencia del día es el balance registrado a las 00:00 CE(S)T. Lo que se compara contra el piso es tu equity durante el día, incluyendo flotante, swaps y comisiones."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿El 5 % es del balance actual o del inicial?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Del capital inicial. En una cuenta de 100 000 USD el monto es siempre 5 000 USD."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Si gano en la mañana tengo más margen en la tarde?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, porque el piso queda fijo desde medianoche y tu equity subió. Pero eso es lo que permite la regla, no lo que conviene a tu plan de riesgo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿A qué hora se reinicia el límite diario?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A las 00:00 CE(S)T (hora de Praga). Conviértela a tu hora local, porque cambia con el horario de verano europeo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿La pérdida máxima de FTMO es trailing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. En el programa de 2 fases es estática: 10 % del capital inicial. En 100 000 USD, el piso es 90 000 USD durante toda la fase."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puedo violar la regla con una operación abierta, sin cerrar en pérdida?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. Basta con que la equity toque el piso diario, aunque sea por un momento."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+<a class="skip" href="#main">Saltar al contenido</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="Cuenta Viva, inicio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+      Cuenta Viva
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="../">Calculadora</a>
+      <a href="../kit.html" class="nav-cta">Kit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="wrap doc article">
+    <h1>Cómo se calcula el drawdown diario en FTMO (con ejemplos)</h1>
+    <p class="updated">Reglas verificadas el 1 de octubre de 2026</p>
+    <div class="prose">
+<blockquote class="note">No es asesoría financiera. Las reglas de cada firma cambian: verifica siempre en la web oficial. Reglas verificadas el 1 de octubre de 2026 en la página oficial de objetivos de FTMO.</blockquote>
+<p>La regla que más challenges termina no es la de pérdida máxima. Es la <strong>pérdida diaria máxima</strong> (<em>Maximum Daily Loss</em>). Y casi siempre la rompe alguien que creía tener margen, porque no sabía desde qué número se mide.</p>
+<p>En este artículo vas a ver exactamente cómo la calcula FTMO en su programa de 2 fases, con cuentas reales en números, y cómo saber en 10 segundos cuánto te queda hoy.</p>
+<h2>La regla, en una frase</h2>
+<p>En FTMO 2-Step, la pérdida diaria máxima es el <strong>5 % del capital inicial</strong>. Cada día a las <strong>00:00 CE(S)T</strong> (hora de Praga) FTMO toma tu <strong>balance</strong> y le resta ese 5 %. Ese resultado es tu <strong>piso del día</strong>. Durante el día, tu <strong>equity</strong> (balance + flotante de posiciones abiertas, con swaps y comisiones) <strong>no puede tocar ese piso</strong>.</p>
+<p>En fórmula:</p>
+<pre class="code"><code>piso_diario = balance a las 00:00 CE(S)T − 5 % × capital inicial
+colchón_hoy = equity actual − piso_diario</code></pre>
+<p>Tres detalles que cambian todo:</p>
+<ol><li><strong>El 5 % es del capital inicial, no del balance de hoy.</strong> En una cuenta de 100 000 USD siempre son 5 000 USD, ganes o pierdas.</li><li><strong>La referencia es el balance a medianoche, no la equity.</strong> Si llegas a medianoche con una operación abierta, su flotante no mueve el piso.</li><li><strong>Cuenta el flotante.</strong> No tienes que cerrar en pérdida para violar la regla: basta con que la equity toque el piso un instante.</li></ol>
+<p>Y además existe la <strong>pérdida máxima</strong> del 10 % del capital inicial, que en FTMO es <strong>estática</strong>: en 100 000 USD el piso total es 90 000 USD durante toda la fase. Tu límite real del día es el más alto de los dos pisos.</p>
+<h2>Ejemplo 1: el día normal</h2>
+<ul><li>Capital inicial: 100 000 USD</li><li>Balance a las 00:00 CE(S)T: 100 000 USD</li><li>Piso diario: 100 000 − 5 000 = <strong>95 000 USD</strong></li><li>Piso máximo (estático): <strong>90 000 USD</strong></li></ul>
+<p>Tu equity no puede bajar de 95 000 hoy. Tienes 5 000 USD de colchón.</p>
+<h2>Ejemplo 2: ayer ganaste</h2>
+<p>Ayer cerraste +2 000 USD. Hoy a medianoche tu balance es 102 000.</p>
+<ul><li>Piso diario: 102 000 − 5 000 = <strong>97 000 USD</strong></li><li>Colchón de hoy: 102 000 − 97 000 = 5 000 USD</li></ul>
+<p>Fíjate: el piso <strong>subió</strong> con tu ganancia. Los 5 000 se miden desde el balance nuevo. Si hoy pierdes 5 000, no "devolviste lo de ayer y quedaste igual": violaste la regla diaria, aunque sigas por encima de 100 000.</p>
+<h2>Ejemplo 3: la operación que dejaste abierta (el error clásico)</h2>
+<p>Ayer abriste un largo en oro y no lo cerraste. A las 00:00 CE(S)T:</p>
+<ul><li>Balance: 100 000 USD (la operación sigue abierta, no ha tocado el balance)</li><li>Flotante: −1 500 USD</li><li>Equity: 98 500 USD</li></ul>
+<p>FTMO toma el <strong>balance</strong> (100 000) como referencia:</p>
+<ul><li>Piso diario: 100 000 − 5 000 = <strong>95 000 USD</strong></li><li>Colchón real al empezar el día: 98 500 − 95 000 = <strong>3 500 USD</strong></li></ul>
+<p>Empiezas el día con 1 500 USD menos de margen del que crees. Si planeabas "arriesgar hasta 5 000 hoy", ya no puedes. Y si el oro abre con hueco en contra, ese flotante puede crecer antes de que hagas nada.</p>
+<h2>Ejemplo 4: ganaste por la mañana y te confiaste</h2>
+<p>Balance a medianoche: 100 000. A las 11:00 ya cerraste +3 000, balance 103 000.</p>
+<ul><li>El piso <strong>no se mueve durante el día</strong>: sigue en <strong>95 000 USD</strong>.</li><li>Colchón: 103 000 − 95 000 = 8 000 USD.</li></ul>
+<p>Matemáticamente tienes más margen. En la práctica, este es el escenario donde mucha gente sube lotaje "porque está en verde" y devuelve todo. La regla te permite perder 8 000 desde aquí; tu plan de riesgo probablemente no.</p>
+<h2>Ejemplo 5: cuando manda la pérdida máxima</h2>
+<p>Llevas una mala racha. Balance a medianoche: 92 000.</p>
+<ul><li>Piso diario: 92 000 − 5 000 = 87 000</li><li>Piso máximo: 90 000</li><li><strong>Tu piso real es 90 000</strong> (el más alto de los dos)</li><li>Colchón: 92 000 − 90 000 = <strong>2 000 USD</strong>, no 5 000</li></ul>
+<p>Este caso es el que más sorprende: la regla diaria "te deja" perder 5 000, pero la máxima te corta en 2 000. Siempre calcula los dos y quédate con el menor colchón.</p>
+<h2>Cómo calcularlo en 10 segundos</h2>
+<p>Antes de abrir la primera operación del día necesitas tres números de tu plataforma: el capital inicial, el balance que tenías a las 00:00 CE(S)T y tu equity actual. Con eso:</p>
+<ol><li>Piso diario = balance 00:00 − 5 % del inicial.</li><li>Piso máximo = 90 % del inicial.</li><li>Colchón = equity − el piso más alto.</li><li>Si tu riesgo por operación es mayor que el colchón, <strong>hoy no operas</strong>.</li></ol>
+<p>Si no quieres hacerlo a mano, la <a href="../">calculadora gratuita de Cuenta Viva</a> tiene el preset de FTMO 2 fases: metes balance inicial, la referencia del día y tu equity, y te devuelve el colchón, cuál límite está más cerca y un semáforo (verde, ámbar, rojo) de "¿puedo operar hoy?". Funciona en el navegador y no guarda tus datos en ningún servidor.</p>
+<h2>Un tema práctico: la hora</h2>
+<p>El reset es a las 00:00 CE(S)T, hora de Europa Central (UTC+1 en invierno, UTC+2 en verano). Para un trader en Latinoamérica eso cae en la tarde del día anterior. Por ejemplo, en Ciudad de México o Bogotá suele ser entre las 16:00 y las 18:00 hora local, según la época del año y el horario de verano europeo. Calcula tu hora exacta una vez y anótala: todo lo que esté abierto a esa hora define el colchón del día siguiente.</p>
+<h2>Qué hacer con esto</h2>
+<ul><li><strong>Anota tu balance de las 00:00 CE(S)T cada día.</strong> Es el número que FTMO usa; no te fíes de la memoria.</li><li><strong>Revisa el flotante antes del reset.</strong> Si vas a dejar algo abierto, sabes que su pérdida pesa sobre el día siguiente.</li><li><strong>Usa un riesgo por operación que quepa varias veces en el colchón.</strong> Si te queda un solo stop de margen, un deslizamiento o un spread abierto en noticias te puede sacar.</li><li><strong>Mira siempre los dos pisos.</strong> El diario y el máximo.</li></ul>
+<p>Ninguna calculadora hace que una estrategia gane. Lo que sí puede hacer es que no pierdas una cuenta por un error de aritmética.</p>
+<h2>Preguntas frecuentes</h2>
+<div class="faq">
+<details><summary>¿La pérdida diaria de FTMO se calcula sobre el balance o sobre la equity?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>La referencia del día es el <strong>balance</strong> registrado a las 00:00 CE(S)T. Lo que se compara contra el piso es tu <strong>equity</strong> durante el día, incluyendo flotante, swaps y comisiones.</p></div></details>
+<details><summary>¿El 5 % es del balance actual o del inicial?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>Del <strong>capital inicial</strong>. En una cuenta de 100 000 USD el monto es siempre 5 000 USD.</p></div></details>
+<details><summary>¿Si gano en la mañana tengo más margen en la tarde?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>Sí, porque el piso queda fijo desde medianoche y tu equity subió. Pero eso es lo que permite la regla, no lo que conviene a tu plan de riesgo.</p></div></details>
+<details><summary>¿A qué hora se reinicia el límite diario?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>A las 00:00 CE(S)T (hora de Praga). Conviértela a tu hora local, porque cambia con el horario de verano europeo.</p></div></details>
+<details><summary>¿La pérdida máxima de FTMO es trailing?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>No. En el programa de 2 fases es <strong>estática</strong>: 10 % del capital inicial. En 100 000 USD, el piso es 90 000 USD durante toda la fase.</p></div></details>
+<details><summary>¿Puedo violar la regla con una operación abierta, sin cerrar en pérdida?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>Sí. Basta con que la equity toque el piso diario, aunque sea por un momento.</p></div></details>
+</div>
+<hr>
+<p><em>Herramienta mencionada: <a href="../">Calculadora Cuenta Viva</a> (gratis). Este artículo no contiene enlaces de afiliado.</em></p>
+    </div>
+    <aside class="article-cta" aria-label="Calculadora">
+      <p><strong>Haz la cuenta con tus números.</strong> La calculadora de Cuenta Viva te da pisos, colchón, lote y semáforo en segundos. Gratis y sin registro.</p>
+      <a class="btn btn-primary" href="../">Abrir la calculadora<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </aside>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="brand" href="../">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+        Cuenta Viva
+      </a>
+      <ul class="foot-links">
+        <li><a href="../">Calculadora</a></li>
+        <li><a href="../kit.html">Kit Cuenta Viva</a></li>
+        <li><a href="../privacidad.html">Privacidad</a></li>
+        <li><a href="../terminos.html">Términos</a></li>
+      </ul>
+    </div>
+    <p>Mantén tu cuenta fondeada viva. Herramientas de control de riesgo; no vendemos señales ni estrategias. Cuenta Viva no está afiliada a FTMO, FundedNext ni The5ers salvo donde se indique.</p>
+  </div>
+</footer>
+</body>
+</html>

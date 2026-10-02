@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calculadora de drawdown y lotaje para cuenta fondeada | Cuenta Viva</title>
+<meta name="description" content="Calculadora gratis de drawdown diario y máximo para cuentas fondeadas (FTMO, FundedNext, The5ers): lotaje, colchón restante y un semáforo que te dice si hoy puedes operar.">
+<link rel="canonical" href="https://cognitrade.github.io/cuentaviva/">
+<meta name="theme-color" content="#0E1116" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F5F7" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_LA">
+<meta property="og:site_name" content="Cuenta Viva">
+<meta property="og:title" content="Calculadora de drawdown y lotaje para cuenta fondeada">
+<meta property="og:description" content="Colchón diario y máximo, lote sugerido y un semáforo para saber si hoy puedes operar. Presets FTMO, FundedNext y The5ers. Gratis.">
+<meta property="og:url" content="https://cognitrade.github.io/cuentaviva/">
+<meta property="og:image" content="https://cognitrade.github.io/cuentaviva/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Cuenta Viva: semáforo verde, colchón diario y lote sugerido.">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Calculadora Cuenta Viva",
+  "url": "https://cognitrade.github.io/cuentaviva/",
+  "description": "Calculadora de drawdown diario y máximo, lotaje y semáforo de riesgo para cuentas fondeadas (prop firms).",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Cualquiera (navegador web)",
+  "inLanguage": "es",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué diferencia hay entre el drawdown diario y el drawdown máximo?",
+      "acceptedAnswer": { "@type": "Answer", "text": "El diario limita cuánto puedes perder en un solo día y se reinicia cada día desde una referencia (el balance o la equity al inicio del día, según la firma). El máximo limita cuánto puedes perder en toda la vida de la cuenta y no se reinicia. El máximo se calcula sobre el balance inicial; el diario, según la firma, sobre el balance inicial (FTMO, FundedNext) o sobre la referencia del día (The5ers High Stakes). Rompes la cuenta si tocas cualquiera de los dos." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es un drawdown trailing y en qué se diferencia del estático?",
+      "acceptedAnswer": { "@type": "Answer", "text": "En el estático el piso máximo queda fijo: balance inicial menos el porcentaje de pérdida máxima. En el trailing el piso sube detrás del pico más alto que alcanza la cuenta, así que las ganancias también se pueden perder. Algunas firmas detienen ese piso cuando llega al balance inicial; en la calculadora eso es la casilla de bloquear en el balance inicial." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo se calcula el lotaje en una cuenta fondeada?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Lote = riesgo en USD ÷ (distancia del stop × valor de 1 punto por lote). Por ejemplo, arriesgar 500 USD con un stop de 20 pips en EURUSD (10 USD por pip por lote) da 500 ÷ (20 × 10) = 2.5 lotes. La calculadora siempre redondea hacia abajo a 0.01 para no pasarte del riesgo." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué el semáforo usa 3 stops como umbral?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Porque las rachas de 3 pérdidas seguidas son normales incluso en sistemas rentables. Si tu colchón no aguanta 3 stops completos, una mala racha corriente te saca de la cuenta. Verde es 3 stops o más, ámbar entre 1 y 3, rojo menos de 1." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué pongo en la referencia de inicio del día?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Lo que tu firma usa como base del límite diario. En FTMO es el balance al inicio del día (reinicio a las 00:00 hora de Europa central). En FundedNext es el balance al inicio del día; si tu equity era mayor, usar la mayor es el supuesto conservador. En The5ers High Stakes es el mayor entre balance y equity al cierre del día anterior, y el 5 % se calcula sobre esa cifra. Si dudas, revisa las reglas oficiales." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿La calculadora guarda mis datos?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Solo en tu propio navegador (localStorage), para que no tengas que escribirlos de nuevo. No se envían a ningún servidor, no hay cuentas ni cookies de seguimiento." }
+    }
+  ]
+}
+</script>
+<script src="config.js" defer></script>
+<script src="calc.js" defer></script>
+<script src="site.js" defer></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></symbol>
+  <symbol id="i-bang" viewBox="0 0 24 24"><path d="M12 5.5v8.5M12 18.5v.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 4.2 2.6 17.6A2 2 0 0 0 4.3 20.6h15.4a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4M12 17v.01"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.01"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4h4"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+<a class="skip" href="#calculadora">Saltar a la calculadora</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Cuenta Viva, inicio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+      Cuenta Viva
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#como-se-calcula" class="nav-hide-sm">Cómo se calcula</a>
+      <a href="#preguntas" class="nav-hide-sm">Preguntas</a>
+      <a href="kit.html" class="nav-cta">Kit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+    <section class="hero" aria-labelledby="titulo">
+      <h1 id="titulo">Calculadora de drawdown y lotaje para tu cuenta fondeada</h1>
+      <p class="lede">Pon tus números y mira cuánto colchón te queda antes del límite diario y del máximo, con qué lote entrar y si hoy conviene operar. Presets de FTMO, FundedNext y The5ers; todo es editable.</p>
+    </section>
+
+    <div class="calc" id="calculadora">
+      <form class="form" id="calc-form" novalidate autocomplete="off" aria-label="Datos de tu cuenta y tu operación">
+        <fieldset class="group">
+          <legend>Tu cuenta</legend>
+          <div class="fields">
+            <div class="field span-2">
+              <label for="firma">Firma y programa</label>
+              <div class="control is-select">
+                <select id="firma" name="firma" aria-describedby="firma-hint">
+                  <option value="ftmo2">FTMO · 2 fases</option>
+                  <option value="fn_stellar2">FundedNext · Stellar 2 fases</option>
+                  <option value="the5ers_hs">The5ers · High Stakes (New)</option>
+                  <option value="custom">Personalizada (mis reglas)</option>
+                </select>
+              </div>
+              <p class="hint" id="firma-hint">Rellena las reglas con valores de referencia oct-2026. Verifica en la web oficial: las firmas cambian sus reglas.</p>
+            </div>
+
+            <div class="field span-2">
+              <span class="label" id="fase-label">Fase</span>
+              <div class="seg" role="radiogroup" aria-labelledby="fase-label">
+                <input type="radio" name="fase" id="fase-f1" value="f1" checked><label for="fase-f1">Fase 1</label>
+                <input type="radio" name="fase" id="fase-f2" value="f2"><label for="fase-f2">Fase 2</label>
+                <input type="radio" name="fase" id="fase-fd" value="fd"><label for="fase-fd">Fondeada</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="b0">Tamaño de la cuenta</label>
+              <div class="control has-unit"><input id="b0" name="b0" inputmode="decimal" list="tamanos" data-money aria-describedby="err-b0"><span class="unit">USD</span></div>
+              <datalist id="tamanos"><option value="10000"><option value="25000"><option value="50000"><option value="100000"><option value="200000"></datalist>
+              <p class="err" id="err-b0" hidden></p>
+            </div>
+
+            <div class="field">
+              <label for="eq">Equity actual</label>
+              <div class="control has-unit"><input id="eq" name="eq" inputmode="decimal" data-money aria-describedby="eq-hint err-eq"><span class="unit">USD</span></div>
+              <p class="hint" id="eq-hint">Balance + flotante.</p>
+              <p class="err" id="err-eq" hidden></p>
+            </div>
+
+            <div class="field span-2">
+              <label for="ref">Referencia de inicio del día</label>
+              <div class="control has-unit"><input id="ref" name="ref" inputmode="decimal" data-money aria-describedby="ref-hint err-ref"><span class="unit">USD</span></div>
+              <p class="hint" id="ref-hint">La base del límite diario que usa tu firma.</p>
+              <p class="err" id="err-ref" hidden></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="group">
+          <legend>Reglas de la firma</legend>
+          <div class="fields">
+            <div class="field">
+              <label for="ddDiario">Pérdida diaria</label>
+              <div class="control has-unit"><input id="ddDiario" name="ddDiario" inputmode="decimal" aria-describedby="err-ddDiario"><span class="unit">%</span></div>
+              <p class="err" id="err-ddDiario" hidden></p>
+            </div>
+            <div class="field">
+              <label for="ddMax">Pérdida máxima</label>
+              <div class="control has-unit"><input id="ddMax" name="ddMax" inputmode="decimal" aria-describedby="err-ddMax"><span class="unit">%</span></div>
+              <p class="err" id="err-ddMax" hidden></p>
+            </div>
+
+            <div class="field span-2">
+              <label for="baseDiaria">La pérdida diaria se calcula sobre</label>
+              <div class="control is-select">
+                <select id="baseDiaria" name="baseDiaria" aria-describedby="base-hint">
+                  <option value="inicial">Balance inicial de la cuenta</option>
+                  <option value="referencia">Referencia de inicio del día</option>
+                </select>
+              </div>
+              <p class="hint" id="base-hint">Lo define tu firma. La pérdida máxima siempre se calcula sobre el balance inicial.</p>
+            </div>
+
+            <div class="field span-2">
+              <span class="label" id="tipo-label">Tipo de pérdida máxima</span>
+              <div class="seg" role="radiogroup" aria-labelledby="tipo-label">
+                <input type="radio" name="tipo" id="tipo-e" value="estatica" checked><label for="tipo-e">Estática</label>
+                <input type="radio" name="tipo" id="tipo-t" value="trailing"><label for="tipo-t">Trailing</label>
+              </div>
+            </div>
+
+            <div class="trailing-box" id="trailing-box" hidden>
+              <div class="field">
+                <label for="pico">Pico más alto de la cuenta</label>
+                <div class="control has-unit"><input id="pico" name="pico" inputmode="decimal" data-money aria-describedby="pico-hint err-pico"><span class="unit">USD</span></div>
+                <p class="hint" id="pico-hint">El balance o equity máximo que ha alcanzado, según tu firma.</p>
+                <p class="err" id="err-pico" hidden></p>
+              </div>
+              <label class="check" for="lock">
+                <input type="checkbox" id="lock" name="lock">
+                <span>Bloquear el piso en el balance inicial<small>El piso deja de subir cuando llega al tamaño de la cuenta.</small></span>
+              </label>
+            </div>
+
+            <div class="field span-2">
+              <label for="objetivo">Objetivo de la fase</label>
+              <div class="control has-unit"><input id="objetivo" name="objetivo" inputmode="decimal" aria-describedby="obj-hint err-objetivo"><span class="unit">%</span></div>
+              <p class="hint" id="obj-hint">Pon 0 si ya estás fondeado.</p>
+              <p class="err" id="err-objetivo" hidden></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="group">
+          <legend>Tu próxima operación</legend>
+          <div class="fields">
+            <div class="field span-2">
+              <label for="riesgo">Riesgo por operación</label>
+              <div class="risk-row">
+                <div class="control has-unit"><input id="riesgo" name="riesgo" inputmode="decimal" aria-describedby="riesgo-hint err-riesgo"><span class="unit" id="riesgo-unit">%</span></div>
+                <div class="seg" role="radiogroup" aria-label="Riesgo en porcentaje o en dólares">
+                  <input type="radio" name="riesgoModo" id="rm-pct" value="pct" checked><label for="rm-pct">%</label>
+                  <input type="radio" name="riesgoModo" id="rm-usd" value="usd"><label for="rm-usd">USD</label>
+                </div>
+              </div>
+              <p class="hint" id="riesgo-hint">Porcentaje del tamaño de la cuenta.</p>
+              <p class="err" id="err-riesgo" hidden></p>
+            </div>
+
+            <div class="field">
+              <label for="instrumento">Instrumento</label>
+              <div class="control is-select">
+                <select id="instrumento" name="instrumento">
+                  <option value="EURUSD">EURUSD</option>
+                  <option value="GBPUSD">GBPUSD</option>
+                  <option value="AUDUSD">AUDUSD</option>
+                  <option value="NZDUSD">NZDUSD</option>
+                  <option value="USDJPY">USDJPY</option>
+                  <option value="XAUUSD">XAUUSD (oro)</option>
+                  <option value="US30">US30</option>
+                  <option value="NAS100">NAS100</option>
+                  <option value="US500">US500</option>
+                  <option value="custom">Otro</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="sl">Stop loss</label>
+              <div class="control has-unit unit-wide"><input id="sl" name="sl" inputmode="decimal" aria-describedby="err-sl"><span class="unit" id="sl-unit">pips</span></div>
+              <p class="err" id="err-sl" hidden></p>
+            </div>
+
+            <div class="field span-2">
+              <label for="vpp">Valor de 1 <span id="vpp-unit">pip</span> por lote</label>
+              <div class="control has-unit"><input id="vpp" name="vpp" inputmode="decimal" aria-describedby="vpp-hint err-vpp"><span class="unit">USD</span></div>
+              <p class="hint" id="vpp-hint">Depende del bróker.</p>
+              <p class="err" id="err-vpp" hidden></p>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+      <section class="results" id="resultado" aria-labelledby="res-title">
+        <h2 class="sr-only" id="res-title">Resultado</h2>
+        <p class="sr-only" id="sr-live" aria-live="polite"></p>
+
+        <div class="signal" id="signal" data-estado="verde">
+          <div class="lamp" aria-hidden="true">
+            <span class="l-rojo"><svg class="icon"><use href="#i-x"/></svg></span>
+            <span class="l-ambar"><svg class="icon"><use href="#i-bang"/></svg></span>
+            <span class="l-verde on"><svg class="icon"><use href="#i-check"/></svg></span>
+          </div>
+          <div>
+            <p class="signal-title" id="sig-title">Puedes operar</p>
+            <p class="signal-msg" id="sig-msg">Calculando…</p>
+          </div>
+        </div>
+
+        <div class="panel lot">
+          <div>
+            <div class="metric-label">Lote sugerido</div>
+            <div class="lot-value" id="o-lote">–</div>
+            <p class="lot-sub" id="o-lote-sub"></p>
+          </div>
+          <div class="alert" id="o-alert" role="note" hidden><svg class="icon"><use href="#i-alert"/></svg><span id="o-alert-text"></span></div>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label">Lote máx. seguro</div>
+              <div class="metric-value" id="o-lotemax">–</div>
+              <div class="metric-note">Con este lote, un stop completo no rompe ningún límite.</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Stops restantes</div>
+              <div class="metric-value" id="o-stops">–</div>
+              <div class="metric-note" id="o-stops-note">Antes del límite más cercano.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="gauges">
+            <div class="gauge" id="g-diario">
+              <div class="gauge-head">
+                <span class="gauge-name">Colchón diario <span class="tag" data-closer hidden>Más cerca</span></span>
+                <span class="gauge-val" data-val>–</span>
+              </div>
+              <div class="track" role="img" data-track aria-label="Colchón diario">
+                <div class="zones"></div><div class="fill"></div><div class="ticks"></div><div class="needle"></div>
+              </div>
+              <div class="gauge-foot"><span data-floor></span><span data-of></span></div>
+            </div>
+
+            <div class="gauge" id="g-max">
+              <div class="gauge-head">
+                <span class="gauge-name">Colchón máximo <span class="tag" data-closer hidden>Más cerca</span></span>
+                <span class="gauge-val" data-val>–</span>
+              </div>
+              <div class="track" role="img" data-track aria-label="Colchón máximo">
+                <div class="zones"></div><div class="fill"></div><div class="ticks"></div><div class="needle"></div>
+              </div>
+              <div class="gauge-foot"><span data-floor></span><span data-of></span></div>
+            </div>
+
+            <div class="legend" aria-hidden="true">
+              <span><i style="background:var(--red)"></i>Menos de 1 stop</span>
+              <span><i style="background:var(--amber)"></i>1 a 3 stops</span>
+              <span><i style="background:var(--green)"></i>3 o más</span>
+              <span>Cada marca = 1 stop</span>
+            </div>
+
+            <div class="gauge" id="g-obj">
+              <div class="gauge-head">
+                <span class="gauge-name">Progreso al objetivo</span>
+                <span class="gauge-val" id="o-obj">–</span>
+              </div>
+              <div class="progress" aria-hidden="true"><span id="o-obj-bar"></span></div>
+              <div class="gauge-foot"><span id="o-obj-note"></span></div>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button type="button" class="btn btn-quiet" id="btn-share"><svg class="icon" aria-hidden="true"><use href="#i-link"/></svg>Copiar enlace con estos datos</button>
+            <button type="button" class="btn btn-quiet" id="btn-reset"><svg class="icon" aria-hidden="true"><use href="#i-reset"/></svg>Restablecer</button>
+            <span class="toast" id="toast" role="status"></span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="dock" id="dock" data-estado="verde" aria-hidden="true">
+    <span class="dock-dot"></span>
+    <span class="dock-text"><strong id="dock-title">Puedes operar</strong><span id="dock-sub"></span></span>
+    <a class="btn btn-ghost" href="#resultado" tabindex="-1">Ver detalle</a>
+  </div>
+
+  <section class="section" id="como-se-calcula" aria-labelledby="h-calc">
+    <div class="wrap split">
+      <div>
+        <h2 id="h-calc">Cómo se calcula</h2>
+        <p class="intro">Todo sale de seis cuentas simples. La pérdida máxima es un porcentaje del balance inicial. La diaria también, salvo en firmas como The5ers High Stakes, donde se calcula sobre la referencia del día. Si tu firma lo hace distinto, ajusta los campos.</p>
+        <div class="example">
+          <h3>Ejemplo con una cuenta de 100,000 USD</h3>
+          <p>Pérdida diaria 5 %, máxima 10 % estática, arrancaste el día en 100,300, tu equity es 99,200 y arriesgas 0.5 % con stop de 20 pips en EURUSD.</p>
+          <ol>
+            <li>Piso diario: 100,300 − 5,000 = <strong>95,300</strong></li>
+            <li>Piso máximo: 100,000 − 10,000 = <strong>90,000</strong></li>
+            <li>Colchón: el menor entre 3,900 y 9,200 = <strong>3,900</strong></li>
+            <li>Lote: 500 ÷ (20 × 10) = <strong>2.50</strong></li>
+            <li>Stops restantes: 3,900 ÷ 500 = <strong>7</strong> → verde</li>
+          </ol>
+        </div>
+      </div>
+      <ol class="checklist">
+        <li>
+          <div class="row"><span class="term">Piso diario</span><span class="dots"></span><span class="resp">Se reinicia</span></div>
+          <p class="formula">Sobre balance inicial: referencia del día − pérdida diaria % × balance inicial<br>Sobre la referencia: referencia del día × (1 − pérdida diaria %)</p>
+          <p class="desc">Si tu equity toca este número durante el día, rompiste el límite diario. Con 100,000 de cuenta, referencia 96,000 y 5 %: 91,000 en el primer caso, 91,200 en el segundo.</p>
+        </li>
+        <li>
+          <div class="row"><span class="term">Piso máximo</span><span class="dots"></span><span class="resp">No se reinicia</span></div>
+          <p class="formula">Estática: balance inicial × (1 − pérdida máxima %)<br>Trailing: pico − pérdida máxima % × balance inicial (con bloqueo, nunca por encima del balance inicial)</p>
+          <p class="desc">El suelo de toda la cuenta. En trailing sube cuando la cuenta marca un nuevo máximo.</p>
+        </li>
+        <li>
+          <div class="row"><span class="term">Colchón</span><span class="dots"></span><span class="resp">El menor</span></div>
+          <p class="formula">equity actual − piso diario, y equity actual − piso máximo</p>
+          <p class="desc">Manda el más pequeño de los dos: es el límite que tienes más cerca. Si es 0 o negativo, la cuenta ya está violada.</p>
+        </li>
+        <li>
+          <div class="row"><span class="term">Lote sugerido</span><span class="dots"></span><span class="resp">Hacia abajo</span></div>
+          <p class="formula">riesgo en USD ÷ (stop × valor de 1 punto por lote)</p>
+          <p class="desc">Redondeado hacia abajo a 0.01 para no pasarte nunca del riesgo que elegiste.</p>
+        </li>
+        <li>
+          <div class="row"><span class="term">Lote máximo seguro</span><span class="dots"></span><span class="resp">Techo</span></div>
+          <p class="formula">colchón ÷ (stop × valor de 1 punto por lote)</p>
+          <p class="desc">El lote más grande con el que un stop completo todavía no te saca. No es una recomendación: es el borde.</p>
+        </li>
+        <li>
+          <div class="row"><span class="term">Semáforo</span><span class="dots"></span><span class="resp">3 stops</span></div>
+          <p class="formula">verde si el colchón ≥ 3 × riesgo · ámbar entre 1 y 3 · rojo si es menor que 1 riesgo</p>
+          <p class="desc">Stops restantes = colchón ÷ riesgo, redondeado hacia abajo.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="preguntas" aria-labelledby="h-faq">
+    <div class="wrap split">
+      <div>
+        <h2 id="h-faq">Preguntas frecuentes</h2>
+        <p class="intro">Lo que más se pregunta cuando alguien pierde una cuenta por un límite que no vio venir.</p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>¿Qué diferencia hay entre el drawdown diario y el máximo?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>El diario limita cuánto puedes perder en un solo día y se reinicia cada día desde una referencia: el balance o la equity al inicio del día, según la firma. El máximo limita cuánto puedes perder en toda la vida de la cuenta y no se reinicia.</p><p>El máximo se calcula sobre el balance inicial. El diario depende de la firma: sobre el balance inicial (FTMO, FundedNext) o sobre la referencia del día (The5ers High Stakes). La cuenta se rompe si tocas cualquiera de los dos, aunque sea con una operación abierta.</p></div>
+        </details>
+        <details>
+          <summary>¿Trailing o estático: qué cambia?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>En el estático el piso máximo queda fijo: balance inicial menos el porcentaje de pérdida máxima. En el trailing el piso sube detrás del pico más alto de la cuenta, así que también puedes perder lo que ya ganaste.</p><p>Algunas firmas detienen ese piso cuando llega al balance inicial. En la calculadora eso es la casilla «Bloquear el piso en el balance inicial».</p></div>
+        </details>
+        <details>
+          <summary>¿Cómo se calcula el lotaje?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>Lote = riesgo en USD ÷ (distancia del stop × valor de 1 punto por lote). Con 500 USD de riesgo, stop de 20 pips y EURUSD (10 USD por pip por lote): 500 ÷ 200 = 2.5 lotes.</p><p>El valor por punto cambia según el instrumento y el bróker, sobre todo en índices. Revísalo en las especificaciones del contrato de tu plataforma.</p></div>
+        </details>
+        <details>
+          <summary>¿Por qué el semáforo usa 3 stops?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>Porque tres pérdidas seguidas son normales incluso en sistemas que ganan. Si tu colchón no aguanta tres stops completos, una racha corriente te saca de la cuenta. Verde: 3 stops o más. Ámbar: entre 1 y 3. Rojo: menos de 1.</p></div>
+        </details>
+        <details>
+          <summary>¿Qué pongo en «referencia de inicio del día»?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>Lo que tu firma usa como base del límite diario:</p><ul><li><strong>FTMO:</strong> el balance al inicio del día. Se reinicia a las 00:00 hora de Europa central (CE(S)T).</li><li><strong>FundedNext:</strong> el balance al inicio del día. Si tu equity era mayor, usa la mayor: es el supuesto conservador.</li><li><strong>The5ers High Stakes:</strong> el mayor entre balance y equity al cierre del día anterior. Ahí el 5 % se calcula sobre esa cifra, no sobre el balance inicial.</li></ul><p>Lo ves en el panel de tu cuenta. Si dudas, revisa las reglas oficiales.</p></div>
+        </details>
+        <details>
+          <summary>¿Guardan mis datos?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>Solo en tu navegador (localStorage), para que no tengas que escribirlos otra vez. Nada se envía a un servidor. No hay cuentas ni cookies de seguimiento. Detalles en la <a href="privacidad.html">política de privacidad</a>.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="articulos" aria-labelledby="h-art">
+    <div class="wrap split">
+      <div>
+        <h2 id="h-art">Para entender las reglas a fondo</h2>
+        <p class="intro">Guías con ejemplos en números, verificadas contra las webs oficiales.</p>
+      </div>
+      <ul class="articles">
+          <li><a href="articulos/como-se-calcula-drawdown-diario-ftmo.html"><strong>Cómo se calcula el drawdown diario en FTMO (con ejemplos)<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></strong><span>Cómo calcula FTMO la pérdida diaria máxima: balance a las 00:00 CE(S)T, flotante incluido, ejemplos con números y el error que más cuentas quema.</span></a></li>
+          <li><a href="articulos/drawdown-estatico-vs-trailing-colchon.html"><strong>Drawdown estático vs trailing: cuál es más peligroso y cómo calcular tu colchón<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></strong><span>Diferencia entre drawdown estático y trailing en cuentas fondeadas, con ejemplos numéricos y cómo calcular tu colchón real antes de cada operación.</span></a></li>
+          <li><a href="articulos/calcular-lotaje-cuenta-fondeada-perdida-diaria.html"><strong>Cómo calcular el lotaje en una cuenta fondeada sin violar la pérdida diaria<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></strong><span>Fórmula de lotaje para cuentas fondeadas con ejemplos en EURUSD, oro y NAS100, y cómo comprobar que un stop completo no rompe tu pérdida diaria.</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="kit" aria-labelledby="h-kit">
+    <div class="wrap">
+      <div class="cta-band">
+        <div>
+          <h2 id="h-kit">Lleva esto a tu hoja, con tu historial</h2>
+          <p>La calculadora te dice cómo estás hoy. El Kit Cuenta Viva guarda cada operación y te muestra dónde se te va la plata.</p>
+          <ul class="ticks-list">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Registro y panel con el mismo semáforo</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Estadísticas por setup y checklist antes de entrar</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>¿Pierdes cuando te saltas el checklist? Lo ves en números</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Bonus: diario de trading offline y cifrado</li>
+          </ul>
+        </div>
+        <div>
+          <div class="price"><span class="now"><small>USD</small><span data-price-launch>9</span></span><span class="was">USD <span data-price-regular>15</span></span><span class="tag-launch">Precio de lanzamiento</span></div>
+          <div class="buy">
+            <a class="btn btn-primary" href="kit.html">Ver qué trae el kit<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <p class="buy-note">Excel y Google Sheets, sin macros. Reembolso en 14 días sin preguntas.</p>
+          </div>
+          <p class="lite" data-lite hidden><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg><a data-lite-link href="#">Descarga gratis la versión LITE de la hoja (Excel)</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section affiliates" id="afiliados" aria-labelledby="h-af" data-affiliates hidden>
+    <div class="wrap">
+      <h2 id="h-af">Enlaces de afiliado</h2>
+      <p class="intro">Si abres una cuenta con estos enlaces, Cuenta Viva puede recibir una comisión. A ti no te cuesta más, y no cambia lo que calcula la herramienta ni lo que recomendamos: verifica siempre las reglas en la web oficial antes de comprar un challenge.</p>
+      <ul data-affiliate-list></ul>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Aviso">
+    <div class="wrap">
+      <p class="disclaimer"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg><span><strong>No es asesoría financiera.</strong> Las reglas de cada firma cambian: verifica siempre en la web oficial. Esta calculadora es una ayuda para no romper reglas por descuido; los resultados dependen de los datos que ingresas y no garantizan nada sobre tus operaciones.</span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="brand" href="./">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+        Cuenta Viva
+      </a>
+      <ul class="foot-links">
+        <li><a href="./">Calculadora</a></li>
+        <li><a href="kit.html">Kit Cuenta Viva</a></li>
+        <li><a href="privacidad.html">Privacidad</a></li>
+        <li><a href="terminos.html">Términos</a></li>
+      </ul>
+    </div>
+    <p>Mantén tu cuenta fondeada viva. Herramientas de control de riesgo; no vendemos señales ni estrategias. Cuenta Viva no está afiliada a FTMO, FundedNext ni The5ers salvo donde se indique.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drawdown estático vs trailing: cuál es más peligroso | Cuenta Viva</title>
+<meta name="description" content="Diferencia entre drawdown estático y trailing en cuentas fondeadas, con ejemplos numéricos y cómo calcular tu colchón real antes de cada operación.">
+<link rel="canonical" href="https://cognitrade.github.io/cuentaviva/articulos/drawdown-estatico-vs-trailing-colchon.html">
+<meta name="theme-color" content="#0E1116" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F5F7" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="es_LA">
+<meta property="og:site_name" content="Cuenta Viva">
+<meta property="og:title" content="Drawdown estático vs trailing: cuál es más peligroso y cómo calcular tu colchón">
+<meta property="og:description" content="Diferencia entre drawdown estático y trailing en cuentas fondeadas, con ejemplos numéricos y cómo calcular tu colchón real antes de cada operación.">
+<meta property="og:url" content="https://cognitrade.github.io/cuentaviva/articulos/drawdown-estatico-vs-trailing-colchon.html">
+<meta property="og:image" content="https://cognitrade.github.io/cuentaviva/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Drawdown estático vs trailing: cuál es más peligroso y cómo calcular tu colchón",
+  "description": "Diferencia entre drawdown estático y trailing en cuentas fondeadas, con ejemplos numéricos y cómo calcular tu colchón real antes de cada operación.",
+  "inLanguage": "es",
+  "datePublished": "2026-10-01",
+  "dateModified": "2026-10-01",
+  "mainEntityOfPage": "https://cognitrade.github.io/cuentaviva/articulos/drawdown-estatico-vs-trailing-colchon.html",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Cuenta Viva",
+    "url": "https://cognitrade.github.io/cuentaviva/"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Cuenta Viva"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué es el drawdown trailing en una cuenta fondeada?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Es una pérdida máxima cuyo piso sube junto con el punto más alto de tu cuenta. Si ganas, el piso sube; si luego pierdes, el piso no baja."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿FTMO usa drawdown trailing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "En el programa de 2 fases, no: la pérdida máxima es estática, 10 % del capital inicial (verificado el 1-oct-2026). Lo mismo en FundedNext Stellar 2-Step y The5ers High Stakes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿El trailing deja de subir en algún momento?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Depende de la firma. Algunas lo bloquean cuando el piso llega al balance inicial; otras no lo bloquean nunca. Está en sus reglas."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué es más peligroso, trailing intradía o al cierre del día?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "En general el intradía, porque un flotante positivo que no cierras también sube el piso."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo sé cuántas operaciones me quedan antes de perder la cuenta?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Divide tu colchón real (el menor entre diario y máximo) entre tu riesgo por operación en USD, y redondea hacia abajo."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+<a class="skip" href="#main">Saltar al contenido</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="Cuenta Viva, inicio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+      Cuenta Viva
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="../">Calculadora</a>
+      <a href="../kit.html" class="nav-cta">Kit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <article class="wrap doc article">
+    <h1>Drawdown estático vs trailing: cuál es más peligroso y cómo calcular tu colchón</h1>
+    <p class="updated">Reglas verificadas el 1 de octubre de 2026</p>
+    <div class="prose">
+<blockquote class="note">No es asesoría financiera. Las reglas de cada firma cambian: verifica siempre en la web oficial.</blockquote>
+<p>Cuando compras un challenge te dicen "pérdida máxima del 10 %" y parece claro. No lo es. Ese 10 % puede estar <strong>fijo</strong> para siempre o puede <strong>perseguirte</strong> a medida que ganas. La diferencia decide cuánto margen tienes en realidad, y mucha gente la descubre el día que le cierran la cuenta estando en ganancia.</p>
+<h2>Las dos formas de medir la pérdida máxima</h2>
+<p><strong>Drawdown estático:</strong> el piso se calcula una vez, sobre el balance inicial, y no se mueve nunca.</p>
+<pre class="code"><code>piso_max = balance_inicial × (1 − % pérdida máxima)</code></pre>
+<p>En una cuenta de 100 000 USD con 10 %, el piso es 90 000 USD. Ganes 20 000 o pierdas 5 000, sigue en 90 000.</p>
+<p><strong>Drawdown trailing (dinámico):</strong> el piso sigue al punto más alto que alcanzó tu cuenta (el "pico").</p>
+<pre class="code"><code>piso_max = PICO − % pérdida máxima × balance_inicial</code></pre>
+<p>Si tu cuenta llega a 104 000, el piso sube a 94 000. Si luego vuelves a 100 000, el piso <strong>no baja</strong>: sigue en 94 000.</p>
+<p>Muchas firmas que usan trailing añaden un <strong>bloqueo</strong>: el piso deja de subir cuando llega al balance inicial. Con bloqueo:</p>
+<pre class="code"><code>piso_max = mínimo(PICO − % × inicial, balance_inicial)</code></pre>
+<h2>Qué usan las firmas más conocidas (verificado el 1-oct-2026)</h2>
+<p>En los tres programas de 2 fases que revisamos en sus webs oficiales, la pérdida máxima es <strong>estática</strong> sobre el balance inicial:</p>
+<div class="table-wrap"><table class="data"><thead><tr><th>Programa</th><th>Pérdida máxima</th><th>Tipo</th></tr></thead><tbody><tr><td>FTMO 2-Step</td><td>10 %</td><td>estática</td></tr><tr><td>FundedNext Stellar 2-Step</td><td>10 %</td><td>estática</td></tr><tr><td>The5ers High Stakes</td><td>10 %</td><td>estática</td></tr></tbody></table></div>
+<p>El trailing aparece en otros productos (es muy común en cuentas de futuros y en algunos planes de un solo paso o sin límite diario). Por ejemplo, FundedNext tiene un producto distinto con trailing calculado al cierre del día. Antes de comprar cualquier plan, busca en sus reglas las palabras <em>trailing</em>, <em>dynamic</em>, <em>relative</em>, <em>high-water mark</em> o <em>EOD</em>.</p>
+<h2>Ejemplo con números: la misma semana, dos reglas</h2>
+<p>Cuenta de 100 000 USD, pérdida máxima 10 %.</p>
+<div class="table-wrap"><table class="data"><thead><tr><th>Día</th><th>Balance al cierre</th><th>Piso estático</th><th>Pico</th><th>Piso trailing</th><th>Colchón estático</th><th>Colchón trailing</th></tr></thead><tbody><tr><td>Lunes</td><td>102 000</td><td>90 000</td><td>102 000</td><td>92 000</td><td>12 000</td><td>10 000</td></tr><tr><td>Martes</td><td>105 000</td><td>90 000</td><td>105 000</td><td>95 000</td><td>15 000</td><td>10 000</td></tr><tr><td>Miércoles</td><td>101 000</td><td>90 000</td><td>105 000</td><td>95 000</td><td>11 000</td><td><strong>6 000</strong></td></tr><tr><td>Jueves</td><td>99 000</td><td>90 000</td><td>105 000</td><td>95 000</td><td>9 000</td><td><strong>4 000</strong></td></tr></tbody></table></div>
+<p>El jueves estás 1 000 USD por debajo del inicio. Con estático te quedan 9 000 de margen. Con trailing, <strong>4 000</strong>. Misma cuenta, misma operativa: menos de la mitad de colchón.</p>
+<p>Esto es lo que hace peligroso al trailing: <strong>las ganancias que devuelves te cuestan margen dos veces</strong>. Primero subieron el piso, después las perdiste.</p>
+<h2>Trailing con bloqueo en el inicial</h2>
+<p>Mismo caso, pero el piso deja de subir en 100 000. Si la cuenta llega a 112 000:</p>
+<ul><li>Sin bloqueo: piso = 112 000 − 10 000 = 102 000</li><li>Con bloqueo: piso = mínimo(102 000, 100 000) = <strong>100 000</strong></li></ul>
+<p>A partir de ahí se comporta como estático: el piso queda clavado en el balance inicial. La lectura práctica: con trailing con bloqueo, <strong>los primeros 10 000 de ganancia son la zona más peligrosa</strong>, porque cada dólar que ganas sube el piso.</p>
+<h2>El matiz que más cuentas quema: trailing intradía vs al cierre</h2>
+<p>Hay firmas que actualizan el pico con la <strong>equity en tiempo real</strong> (incluye el flotante) y otras que lo hacen solo con el balance o la equity <strong>al cierre del día</strong> (EOD). Revisa cuál es la tuya.</p>
+<p>Ejemplo con trailing intradía, cuenta de 100 000, máximo 10 %:</p>
+<ol><li>Abres una operación. Llega a +3 000 de flotante. Tu equity tocó 103 000 → el piso sube a <strong>93 000</strong>.</li><li>No cierras. El precio vuelve y cierras en 0.</li><li>Tu balance sigue en 100 000, pero tu piso ahora es 93 000. <strong>Perdiste 3 000 de colchón sin perder un dólar.</strong></li></ol>
+<p>Con trailing al cierre del día, ese pico de flotante no cuenta si no se mantuvo hasta el cierre. Por eso el intradía suele ser el más exigente.</p>
+<h2>¿Cuál es más peligroso?</h2>
+<p>Ordenado del más tolerante al más exigente, para el mismo porcentaje:</p>
+<ol><li><strong>Estático:</strong> el piso no se mueve. Tu colchón solo depende de cuánto has perdido.</li><li><strong>Trailing con bloqueo en el inicial:</strong> exigente al principio, se vuelve estático cuando ganas lo suficiente.</li><li><strong>Trailing al cierre del día, sin bloqueo:</strong> te persigue siempre, pero solo con lo que consolidas.</li><li><strong>Trailing intradía sin bloqueo:</strong> te persigue incluso con ganancias que nunca cerraste.</li></ol>
+<p>Un trailing no es "malo" por sí mismo; suele venir con otras condiciones (precio, objetivos). Lo peligroso es operarlo con la cabeza puesta en una regla estática.</p>
+<h2>Cómo calcular tu colchón real (estático o trailing)</h2>
+<p>El colchón que importa es el <strong>menor</strong> de dos números:</p>
+<pre class="code"><code>colchón_diario = equity − piso_diario
+colchón_max    = equity − piso_max
+colchón        = mínimo(colchón_diario, colchón_max)</code></pre>
+<p>Ejemplo con trailing. Cuenta de 100 000, máximo 10 % trailing sin bloqueo, diario 5 % sobre el inicial, pico 106 000, balance a inicio del día 103 000, equity ahora 102 500:</p>
+<ul><li>Piso máximo: 106 000 − 10 000 = 96 000 → colchón máx = 6 500</li><li>Piso diario: 103 000 − 5 000 = 98 000 → colchón diario = 4 500</li><li><strong>Colchón real: 4 500</strong> (manda el diario)</li></ul>
+<p>Si arriesgas 500 USD por operación, te quedan 9 stops completos. Si arriesgas 1 500, solo 3. Ese número, "stops que me quedan", es más útil que cualquier porcentaje.</p>
+<p>La <a href="../">calculadora gratuita de Cuenta Viva</a> hace este cálculo con modo estático o trailing (con o sin bloqueo en el balance inicial): pones el pico, la referencia del día y tu equity, y te muestra el colchón, cuántos stops te quedan y qué límite está más cerca.</p>
+<h2>Checklist para cuentas con trailing</h2>
+<ul><li>Anota tu <strong>pico</strong> cada día. Es el número que define tu piso; la plataforma no siempre lo muestra.</li><li>Averigua si el trailing es <strong>intradía o al cierre</strong> y si tiene <strong>bloqueo</strong>.</li><li>Si es intradía, decide de antemano qué haces con un flotante grande (parciales, mover stop). Dejar correr y devolver te sube el piso.</li><li>Mide tu riesgo en "stops restantes", no en porcentaje.</li></ul>
+<h2>Preguntas frecuentes</h2>
+<div class="faq">
+<details><summary>¿Qué es el drawdown trailing en una cuenta fondeada?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>Es una pérdida máxima cuyo piso sube junto con el punto más alto de tu cuenta. Si ganas, el piso sube; si luego pierdes, el piso no baja.</p></div></details>
+<details><summary>¿FTMO usa drawdown trailing?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>En el programa de 2 fases, no: la pérdida máxima es estática, 10 % del capital inicial (verificado el 1-oct-2026). Lo mismo en FundedNext Stellar 2-Step y The5ers High Stakes.</p></div></details>
+<details><summary>¿El trailing deja de subir en algún momento?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>Depende de la firma. Algunas lo bloquean cuando el piso llega al balance inicial; otras no lo bloquean nunca. Está en sus reglas.</p></div></details>
+<details><summary>¿Qué es más peligroso, trailing intradía o al cierre del día?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>En general el intradía, porque un flotante positivo que no cierras también sube el piso.</p></div></details>
+<details><summary>¿Cómo sé cuántas operaciones me quedan antes de perder la cuenta?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary><div class="answer"><p>Divide tu colchón real (el menor entre diario y máximo) entre tu riesgo por operación en USD, y redondea hacia abajo.</p></div></details>
+</div>
+<hr>
+<p><em>Herramienta mencionada: <a href="../">Calculadora Cuenta Viva</a> (gratis). Este artículo no contiene enlaces de afiliado.</em></p>
+    </div>
+    <aside class="article-cta" aria-label="Calculadora">
+      <p><strong>Haz la cuenta con tus números.</strong> La calculadora de Cuenta Viva te da pisos, colchón, lote y semáforo en segundos. Gratis y sin registro.</p>
+      <a class="btn btn-primary" href="../">Abrir la calculadora<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </aside>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="brand" href="../">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+        Cuenta Viva
+      </a>
+      <ul class="foot-links">
+        <li><a href="../">Calculadora</a></li>
+        <li><a href="../kit.html">Kit Cuenta Viva</a></li>
+        <li><a href="../privacidad.html">Privacidad</a></li>
+        <li><a href="../terminos.html">Términos</a></li>
+      </ul>
+    </div>
+    <p>Mantén tu cuenta fondeada viva. Herramientas de control de riesgo; no vendemos señales ni estrategias. Cuenta Viva no está afiliada a FTMO, FundedNext ni The5ers salvo donde se indique.</p>
+  </div>
+</footer>
+</body>
+</html>

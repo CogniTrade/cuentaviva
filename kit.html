@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kit Cuenta Viva: plantilla de control de riesgo para cuenta fondeada</title>
+<meta name="description" content="Plantilla Excel y Google Sheets para cuentas fondeadas: registro, panel con semáforo, reglas por firma, estadísticas por setup y checklist. Bonus: diario de trading offline y cifrado. USD 9 de lanzamiento.">
+<link rel="canonical" href="https://cognitrade.github.io/cuentaviva/kit.html">
+<meta name="theme-color" content="#0E1116" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F5F7" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+
+<meta property="og:type" content="product">
+<meta property="og:locale" content="es_LA">
+<meta property="og:site_name" content="Cuenta Viva">
+<meta property="og:title" content="Kit Cuenta Viva: control de riesgo para tu cuenta fondeada">
+<meta property="og:description" content="Registro, panel con semáforo, reglas por firma y estadísticas por setup en una plantilla Excel / Google Sheets. Sin macros. USD 9 de lanzamiento.">
+<meta property="og:url" content="https://cognitrade.github.io/cuentaviva/kit.html">
+<meta property="og:image" content="https://cognitrade.github.io/cuentaviva/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Kit Cuenta Viva",
+  "description": "Plantilla Excel y Google Sheets (sin macros) para cuentas fondeadas: registro de operaciones, panel con semáforo de riesgo, reglas por firma, estadísticas por setup, análisis de checklist y checklist previo. Incluye como bonus Cuenta Viva Journal, un diario de trading offline y cifrado en un solo archivo HTML.",
+  "brand": { "@type": "Brand", "name": "Cuenta Viva" },
+  "category": "Plantilla de hoja de cálculo",
+  "url": "https://cognitrade.github.io/cuentaviva/kit.html",
+  "offers": {
+    "@type": "Offer",
+    "price": "9.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/PreOrder",
+    "url": "https://cognitrade.github.io/cuentaviva/kit.html"
+  }
+}
+</script>
+<script src="config.js" defer></script>
+<script src="site.js" defer></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></symbol>
+  <symbol id="i-bang" viewBox="0 0 24 24"><path d="M12 5.5v8.5M12 18.5v.01"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.01"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-yes" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.3l2.8 2.8L16.2 9.6"/></symbol>
+  <symbol id="i-no" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+</svg>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Cuenta Viva, inicio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+      Cuenta Viva
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="./">Calculadora</a>
+      <a href="#que-trae" class="nav-hide-sm">Qué trae</a>
+      <a href="#preguntas" class="nav-hide-sm">Preguntas</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap kit-hero">
+    <div>
+      <h1>Kit Cuenta Viva</h1>
+      <p class="lede">Tu cuenta fondeada en una hoja: registras cada operación y el panel te dice, antes de entrar, cuánto colchón te queda, con qué lote y si hoy toca parar.</p>
+
+      <div class="price"><span class="now"><small>USD</small><span data-price-launch>9</span></span><span class="was">USD <span data-price-regular>15</span></span><span class="tag-launch">Precio de lanzamiento</span></div>
+
+      <div class="buy" data-buy-box>
+        <span class="btn" data-buy aria-disabled="true">Lanzamiento muy pronto</span>
+        <a class="btn btn-ghost" data-buy-latam href="#" hidden rel="noopener">Pagar desde LatAm (Hotmart)</a>
+        <a class="btn btn-ghost" data-waitlist href="#" hidden rel="noopener">Unirme a la lista de espera</a>
+        <p class="buy-note" data-soon-note>Todavía no está a la venta. Cuando abra, el precio de lanzamiento será USD 9. Mientras tanto, la <a href="./">calculadora</a> es gratis y completa.</p>
+        <p class="buy-note" data-buy-note hidden>Pago procesado por Polar (merchant of record). Reembolso en 14 días sin preguntas.</p>
+      </div>
+      <p class="honest">No te va a volver rentable. Te evita romper una regla por descuido y te muestra tus números sin maquillaje.</p>
+    </div>
+
+    <figure class="mock" aria-label="Vista ilustrativa del panel del kit con datos de ejemplo" style="margin:0">
+      <div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><b>Kit_Cuenta_Viva.xlsx</b></div>
+      <div class="mock-body" aria-hidden="true">
+        <div class="mock-signal">
+          <div class="lamp"><span class="l-rojo"><svg class="icon"><use href="#i-x"/></svg></span><span class="l-ambar"><svg class="icon"><use href="#i-bang"/></svg></span><span class="l-verde on"><svg class="icon"><use href="#i-check"/></svg></span></div>
+          <div><strong>Puedes operar</strong><span class="tabular">Colchón US$ 3,900 · 7 stops</span></div>
+        </div>
+        <div class="mock-kpis">
+          <div><span>Lote</span><b>2.50</b></div>
+          <div><span>Piso diario</span><b>95,300</b></div>
+          <div><span>Lote máx.</span><b>19.50</b></div>
+        </div>
+        <table class="sheet">
+          <thead><tr><th style="width:22%">Fecha</th><th>Setup</th><th class="r" style="width:18%">R</th><th style="width:24%">Checklist</th></tr></thead>
+          <tbody>
+            <tr><td>02-oct</td><td>Ruptura</td><td class="r pos">+2.0</td><td><span class="pill ok">Sí</span></td></tr>
+            <tr><td>03-oct</td><td>Pullback</td><td class="r neg">−1.0</td><td><span class="pill ok">Sí</span></td></tr>
+            <tr><td>03-oct</td><td>Impulso</td><td class="r neg">−1.0</td><td><span class="pill no">No</span></td></tr>
+            <tr><td>06-oct</td><td>Pullback</td><td class="r pos">+1.6</td><td><span class="pill ok">Sí</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mock-tabs" aria-hidden="true"><span class="on">Panel</span><span>Registro</span><span>Reglas</span><span>Estadísticas</span><span>Checklist</span></div>
+      <figcaption class="mock-caption">Vista ilustrativa con datos de ejemplo.</figcaption>
+    </figure>
+  </div>
+
+  <section class="section" id="que-trae" aria-labelledby="h-trae">
+    <div class="wrap split">
+      <div>
+        <h2 id="h-trae">Qué trae</h2>
+        <p class="intro">Un archivo .xlsx sin macros que se abre en Excel y en Google Sheets, más un bonus para llevar tu diario sin depender de nadie.</p>
+      </div>
+      <ul class="checklist">
+        <li><div class="row"><span class="term">Registro de operaciones</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">Fecha, instrumento, setup, riesgo, resultado en R y si cumpliste el checklist. Una fila por operación.</p></li>
+        <li><div class="row"><span class="term">Panel con semáforo</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">La misma matemática de la calculadora, alimentada con tu registro: pisos, colchón, lote y verde, ámbar o rojo.</p></li>
+        <li><div class="row"><span class="term">Reglas por firma</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">FTMO, FundedNext, The5ers y una personalizada. Cambias la firma y todo se recalcula. Valores editables, porque las reglas cambian.</p></li>
+        <li><div class="row"><span class="term">Estadísticas por setup</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">Operaciones, porcentaje de acierto, R promedio y expectativa de cada setup.</p></li>
+        <li><div class="row"><span class="term">¿Pierdo cuando me salto el checklist?</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">Compara tus resultados con y sin checklist cumplido. Sin opiniones: tus propios números.</p></li>
+        <li><div class="row"><span class="term">Checklist antes de entrar</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">Preguntas cortas para responder antes de cada operación. Editable.</p></li>
+        <li><div class="row"><span class="term">Cuenta Viva Journal</span><span class="dots"></span><span class="resp is-bonus">Bonus</span></div><p class="desc">Diario de trading en un solo archivo HTML, offline y cifrado, con panel, analíticas y vistas semanales y mensuales.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-detalle">
+    <div class="wrap">
+      <h2 id="h-detalle">Por dentro</h2>
+      <p class="intro">Las vistas siguientes son maquetas con datos de ejemplo, para que veas la estructura. No son resultados reales de nadie.</p>
+
+      <div class="features">
+        <div class="feature">
+          <div>
+            <h3>Qué setup te paga y cuál te cobra</h3>
+            <p>Cada operación del registro alimenta una tabla por setup. Al mes sabes con números cuál vale la pena repetir y cuál solo te da adrenalina.</p>
+            <ul>
+              <li>Expectativa en R por setup</li>
+              <li>Porcentaje de acierto y número de operaciones</li>
+            </ul>
+          </div>
+          <figure class="mock" style="margin:0" aria-label="Maqueta de la tabla de estadísticas por setup con datos de ejemplo">
+            <div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><b>Estadísticas por setup</b></div>
+            <div class="mock-body" aria-hidden="true">
+              <table class="sheet">
+                <thead><tr><th>Setup</th><th class="r">Ops.</th><th class="r">Acierto</th><th class="r">R prom.</th></tr></thead>
+                <tbody>
+                  <tr><td>Pullback</td><td class="r">24</td><td class="r">46 %</td><td class="r pos">+0.38</td></tr>
+                  <tr><td>Ruptura</td><td class="r">17</td><td class="r">35 %</td><td class="r pos">+0.12</td></tr>
+                  <tr><td>Reversión</td><td class="r">11</td><td class="r">27 %</td><td class="r neg">−0.29</td></tr>
+                  <tr><td>Impulso</td><td class="r">9</td><td class="r">22 %</td><td class="r neg">−0.41</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figcaption class="mock-caption">Datos de ejemplo.</figcaption>
+          </figure>
+        </div>
+
+        <div class="feature flip">
+          <div>
+            <h3>¿Pierdes cuando te saltas el checklist?</h3>
+            <p>Marcas en cada operación si cumpliste el checklist. La hoja separa los dos grupos y te muestra la diferencia. Si la respuesta es sí, ya sabes qué arreglar primero, y no es la estrategia.</p>
+          </div>
+          <figure class="mock" style="margin:0" aria-label="Maqueta del análisis con y sin checklist, datos de ejemplo">
+            <div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><b>Checklist: sí vs. no</b></div>
+            <div class="mock-body" aria-hidden="true">
+              <div class="compare">
+                <div class="compare-row"><span>Con checklist</span><div class="bar"><span style="width:62%;background:var(--green)"></span></div><b class="pos">+0.31 R</b></div>
+                <div class="compare-row"><span>Sin checklist</span><div class="bar"><span style="width:44%;background:var(--red)"></span></div><b class="neg">−0.22 R</b></div>
+              </div>
+              <table class="sheet">
+                <thead><tr><th></th><th class="r">Ops.</th><th class="r">Acierto</th><th class="r">R total</th></tr></thead>
+                <tbody>
+                  <tr><td>Con checklist</td><td class="r">48</td><td class="r">44 %</td><td class="r pos">+14.9</td></tr>
+                  <tr><td>Sin checklist</td><td class="r">13</td><td class="r">23 %</td><td class="r neg">−2.9</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figcaption class="mock-caption">Datos de ejemplo.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section journal" aria-labelledby="h-journal">
+    <div class="wrap feature">
+      <div>
+        <h2 id="h-journal">Bonus: Cuenta Viva Journal</h2>
+        <p>Un diario de trading que es un solo archivo HTML. Lo abres en tu navegador, sin instalar nada y sin internet. Tus datos quedan cifrados en tu computador: no hay nube, no hay cuenta, no hay servidor nuestro de por medio.</p>
+        <ul>
+          <li>Panel con tus resultados de un vistazo</li>
+          <li>Analíticas de tus operaciones</li>
+          <li>Vistas semanales y mensuales</li>
+          <li>Cifrado con tu contraseña. Guárdala bien: no hay servidor que pueda recuperarla. Haz copias del archivo.</li>
+        </ul>
+      </div>
+      <figure class="mock" style="margin:0" aria-label="Maqueta del Cuenta Viva Journal con datos de ejemplo">
+        <div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><b>cuenta-viva-journal.html</b></div>
+        <div class="mock-body" aria-hidden="true">
+          <span class="lock-line"><svg class="icon"><use href="#i-lock"/></svg>Cifrado · solo en este equipo</span>
+          <div class="mock-kpis">
+            <div><span>Semana</span><b class="pos">+3.4 R</b></div>
+            <div><span>Operaciones</span><b>11</b></div>
+            <div><span>Racha</span><b>2 ganadas</b></div>
+          </div>
+          <div class="chart-bars"><span style="height:40%"></span><span class="n" style="height:22%"></span><span style="height:58%"></span><span style="height:30%"></span><span class="n" style="height:35%"></span><span style="height:64%"></span><span style="height:48%"></span><span class="n" style="height:18%"></span><span style="height:72%"></span><span style="height:52%"></span></div>
+          <div class="cal">
+            <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+            <span class="g">1</span><span class="r">2</span><span class="g">3</span><span>4</span><span class="g">5</span><span>6</span><span>7</span>
+            <span class="g">8</span><span class="g">9</span><span class="r">10</span><span class="g">11</span><span>12</span><span>13</span><span>14</span>
+          </div>
+        </div>
+        <figcaption class="mock-caption">Datos de ejemplo.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-fit">
+    <div class="wrap">
+      <h2 id="h-fit">Para quién es, y para quién no</h2>
+      <div class="fit">
+        <div class="yes">
+          <h3><svg class="icon" aria-hidden="true"><use href="#i-yes"/></svg>Es para ti si…</h3>
+          <ul>
+            <li>Operas un challenge o una cuenta fondeada y quieres ver los límites antes de entrar, no después.</li>
+            <li>Ya perdiste una cuenta por el límite diario «sin darte cuenta».</li>
+            <li>Quieres saber con números qué setups te funcionan.</li>
+            <li>Prefieres una hoja tuya antes que otra app con suscripción.</li>
+          </ul>
+        </div>
+        <div class="no">
+          <h3><svg class="icon" aria-hidden="true"><use href="#i-no"/></svg>No es para ti si…</h3>
+          <ul>
+            <li>Buscas señales, una estrategia o alguien que te diga qué operar.</li>
+            <li>Esperas que una plantilla te haga pasar el challenge. No lo hará.</li>
+            <li>No vas a registrar tus operaciones: sin datos, la hoja no puede ayudarte.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="preguntas" aria-labelledby="h-faq">
+    <div class="wrap split">
+      <div>
+        <h2 id="h-faq">Preguntas</h2>
+        <p class="intro">Si te queda una duda, la respuesta corta probablemente está aquí.</p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>¿En qué formato viene?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>Un archivo .xlsx sin macros, más el Cuenta Viva Journal como archivo .html. Nada que instalar.</p></div>
+        </details>
+        <details>
+          <summary>¿Funciona en Google Sheets?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>Sí. Subes el .xlsx a tu Google Drive y lo abres con Google Sheets. Como no usa macros, las fórmulas funcionan igual que en Excel.</p></div>
+        </details>
+        <details>
+          <summary>¿Y si no me sirve?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>Tienes 14 días para pedir el reembolso, sin preguntas. Lo gestiona Polar, la plataforma que procesa el pago.</p></div>
+        </details>
+        <details>
+          <summary>¿Las actualizaciones tienen costo?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>Todas las actualizaciones de la versión 1 son gratis para quien compró: correcciones y ajustes cuando cambien las reglas de las firmas.</p></div>
+        </details>
+        <details>
+          <summary>¿Me ayuda a pasar el challenge?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>No directamente, y desconfía de quien te lo prometa. Lo que hace es que no pierdas la cuenta por un límite que no viste y que tengas tus números claros para mejorar.</p></div>
+        </details>
+        <details>
+          <summary>¿Dónde quedan mis datos?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>En tu archivo: tu Excel, tu Google Drive o, en el caso del Journal, tu computador. Cuenta Viva no recibe ni guarda tus operaciones.</p></div>
+        </details>
+        <details>
+          <summary>¿Las reglas de las firmas están al día?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <div class="answer"><p>Los presets son valores de referencia de octubre de 2026 y todos son editables. Las firmas cambian sus reglas: verifica siempre en su web oficial.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-final">
+    <div class="wrap">
+      <div class="cta-band">
+        <div>
+          <h2 id="h-final">Que el límite no te tome por sorpresa</h2>
+          <p>Plantilla, panel con semáforo, estadísticas y el Journal de bonus. Un solo pago, sin suscripción.</p>
+        </div>
+        <div>
+          <div class="price"><span class="now"><small>USD</small><span data-price-launch>9</span></span><span class="was">USD <span data-price-regular>15</span></span><span class="tag-launch">Precio de lanzamiento</span></div>
+          <div class="buy" data-buy-box>
+            <span class="btn" data-buy aria-disabled="true">Lanzamiento muy pronto</span>
+            <a class="btn btn-ghost" data-buy-latam href="#" hidden rel="noopener">Pagar desde LatAm (Hotmart)</a>
+            <a class="btn btn-ghost" data-waitlist href="#" hidden rel="noopener">Unirme a la lista de espera</a>
+            <p class="buy-note" data-soon-note>Todavía no está a la venta. Mientras tanto, usa la <a href="./">calculadora gratis</a>.</p>
+            <p class="buy-note" data-buy-note hidden>Reembolso en 14 días sin preguntas. Actualizaciones de la v1 gratis.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Aviso">
+    <div class="wrap">
+      <p class="disclaimer"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg><span><strong>No es asesoría financiera.</strong> Las reglas de cada firma cambian: verifica siempre en la web oficial. El kit es una herramienta de organización y control de riesgo; no incluye señales ni estrategias y no garantiza resultados.</span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="brand" href="./">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0E1116"/><path d="M4.5 21.5h4.5l2-4 2.6 7.5 3.4-13 2.5 6 3.2-4.5 4.8-5" fill="none" stroke="#1FBF75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27.5" cy="8.5" r="1.9" fill="#1FBF75"/></svg>
+        Cuenta Viva
+      </a>
+      <ul class="foot-links">
+        <li><a href="./">Calculadora</a></li>
+        <li><a href="kit.html" aria-current="page">Kit Cuenta Viva</a></li>
+        <li><a href="privacidad.html">Privacidad</a></li>
+        <li><a href="terminos.html">Términos</a></li>
+      </ul>
+    </div>
+    <p>Mantén tu cuenta fondeada viva. Herramientas de control de riesgo; no vendemos señales ni estrategias. Cuenta Viva no está afiliada a FTMO, FundedNext ni The5ers salvo donde se indique.</p>
+  </div>
+</footer>
+</body>
+</html>
