@@ -21,7 +21,7 @@ window.CUENTA_VIVA_CONFIG = {
   WAITLIST_URL: "",
 
   // Precios mostrados en la web (USD).
-  PRECIO_LANZAMIENTO: 15,
+  PRECIO_LANZAMIENTO: 15.55,
   PRECIO_NORMAL: 19,
 
   // Enlaces de afiliado. Vacíos = no se muestran y no aparece la sección de divulgación.
