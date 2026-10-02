@@ -91,7 +91,7 @@
     </div>
 
     <figure class="mock" aria-label="Vista ilustrativa del panel del kit con datos de ejemplo" style="margin:0">
-      <div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><b>Kit_Cuenta_Viva.xlsx</b></div>
+      <div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><b>Kit_Cuenta_Viva_v1.xlsx</b></div>
       <div class="mock-body" aria-hidden="true">
         <div class="mock-signal">
           <div class="lamp"><span class="l-rojo"><svg class="icon"><use href="#i-x"/></svg></span><span class="l-ambar"><svg class="icon"><use href="#i-bang"/></svg></span><span class="l-verde on"><svg class="icon"><use href="#i-check"/></svg></span></div>
@@ -127,7 +127,7 @@
         <li><div class="row"><span class="term">Registro de operaciones</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">Fecha, instrumento, setup, riesgo, resultado en R y si cumpliste el checklist. Una fila por operación.</p></li>
         <li><div class="row"><span class="term">Panel con semáforo</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">La misma matemática de la calculadora, alimentada con tu registro: pisos, colchón, lote y verde, ámbar o rojo.</p></li>
         <li><div class="row"><span class="term">Reglas por firma</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">FTMO, FundedNext, The5ers y una personalizada. Cambias la firma y todo se recalcula. Valores editables, porque las reglas cambian.</p></li>
-        <li><div class="row"><span class="term">Estadísticas por setup</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">Operaciones, porcentaje de acierto, R promedio y expectativa de cada setup.</p></li>
+        <li><div class="row"><span class="term">Estadísticas por setup</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">Operaciones, porcentaje de acierto, R total, R promedio (tu expectativa en R), profit factor y resultado en USD de cada setup. También por día de la semana.</p></li>
         <li><div class="row"><span class="term">¿Pierdo cuando me salto el checklist?</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">Compara tus resultados con y sin checklist cumplido. Sin opiniones: tus propios números.</p></li>
         <li><div class="row"><span class="term">Checklist antes de entrar</span><span class="dots"></span><span class="resp">Incluido</span></div><p class="desc">Preguntas cortas para responder antes de cada operación. Editable.</p></li>
         <li><div class="row"><span class="term">Cuenta Viva Journal</span><span class="dots"></span><span class="resp is-bonus">Bonus</span></div><p class="desc">Diario de trading en un solo archivo HTML, offline y cifrado, con panel, analíticas y vistas semanales y mensuales.</p></li>
@@ -203,7 +203,7 @@
           <li>Panel con tus resultados de un vistazo</li>
           <li>Analíticas de tus operaciones</li>
           <li>Vistas semanales y mensuales</li>
-          <li>Cifrado con tu contraseña. Guárdala bien: no hay servidor que pueda recuperarla. Haz copias del archivo.</li>
+          <li>Cifrado con tu contraseña y una frase de recuperación de 12 palabras. Sin la contraseña ni la frase nadie puede recuperar los datos: no hay servidor. Exporta respaldos con frecuencia.</li>
         </ul>
       </div>
       <figure class="mock" style="margin:0" aria-label="Maqueta del Cuenta Viva Journal con datos de ejemplo">
@@ -265,7 +265,7 @@
         </details>
         <details>
           <summary>¿Funciona en Google Sheets?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
-          <div class="answer"><p>Sí. Subes el .xlsx a tu Google Drive y lo abres con Google Sheets. Como no usa macros, las fórmulas funcionan igual que en Excel.</p></div>
+          <div class="answer"><p>Sí. Subes el .xlsx a tu Google Drive y lo abres con Google Sheets. No usa macros y está hecho solo con funciones que Google Sheets también tiene. La fecha de “hoy” sale de la zona horaria de tu hoja (Archivo &gt; Configuración).</p></div>
         </details>
         <details>
           <summary>¿Y si no me sirve?<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></summary>
