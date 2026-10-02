@@ -151,6 +151,67 @@
   var lastLive = '';
   var liveTimer;
 
+  /* ---------- Voz del compañero ----------
+   * Primero el dato, después una opción. Nada de vergüenza ni de hype.
+   * Base: contenido/marketing/brief_psicologia.md (sección 6). */
+  var VOICES = {
+    verde: [
+      'Tienes espacio para {n} stops completos. Opera tu plan, no el colchón.',
+      'El lote máximo seguro es un techo, no una meta.',
+      'Si tu setup no aparece hoy, no operar también cuenta como día dentro del plan.',
+      'Antes de entrar: ¿pasa el checklist? Si no, esperas la próxima.',
+      'Si cierras dos pérdidas seguidas, vuelves aquí antes de la tercera.',
+      'Verde no significa «ahora sí, a recuperar». Significa que hay margen para tu plan de siempre.',
+      'Operas solo, pero no a ciegas: ya sabes cuánto te queda.'
+    ],
+    ambar: [
+      'Te quedan {n} stops antes del límite {lim}. Es momento de ir más despacio.',
+      'Si entras, que sea con la mitad del riesgo. Hoy manda el colchón.',
+      'Las ganas de cerrar el día en positivo son normales. No son una señal del mercado.',
+      'Antes de la próxima orden, ponle nombre a lo que sientes: ¿calma, prisa o rabia?',
+      'Si la próxima no es tu mejor setup, hoy no hay próxima.',
+      'Proteger lo que queda también es avanzar.'
+    ],
+    rojo: [
+      'Un stop más te deja bajo el piso. Hoy se cierra aquí.',
+      'Cierra la plataforma, no la minimices. Mañana el colchón diario se recalcula.',
+      'Las ganas de recuperar son lo más común después de perder. Por eso la regla la decidiste antes.',
+      'Parar hoy no es perder el día. Es conservar la cuenta para operar mañana.',
+      'Si respetas el límite, eso es ejecutar bien, aunque el número esté en rojo.',
+      'Algo útil ahora: anota el día en tu registro y califica el proceso aparte del dinero.',
+      'Sal a caminar 15 minutos o habla con alguien de algo que no sea trading.'
+    ],
+    violada: [
+      'Esta cuenta terminó; tu proceso no.',
+      'Le pasa a la mayoría de quienes intentan un challenge. No define quién eres como trader.',
+      'Hoy no compres otro challenge. Si mañana sigues queriéndolo, primero revisa tus números.',
+      'Háblate como le hablarías a un amigo que acaba de pasar por esto. Ayuda más que castigarte.',
+      'Mira tu registro: ¿fue la estrategia, una regla rota, tu estado o varianza? Busca una sola causa principal.',
+      'Si esto te pesa más que una cuenta, cuéntaselo a alguien de confianza. No tienes que cargarlo solo.'
+    ]
+  };
+  var voiceKey = '';
+  var voiceIdx = 0;
+
+  function dayIndex() {
+    var d = new Date();
+    return Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 864e5);
+  }
+
+  function setVoice(key, vars) {
+    var box = $('sig-voice');
+    document.body.classList.toggle('cv-pausa', key === 'rojo' || key === 'violada');
+    var list = VOICES[key];
+    if (!list) { box.hidden = true; voiceKey = ''; return; }
+    // Una frase por día y estado; cambia solo si cambia el estado o se pide otra.
+    if (key !== voiceKey) { voiceKey = key; voiceIdx = dayIndex() % list.length; }
+    var txt = list[voiceIdx % list.length]
+      .replace('{n}', vars.n)
+      .replace('{lim}', vars.lim);
+    $('sig-voice-text').textContent = txt;
+    box.hidden = false;
+  }
+
   function setSignal(estado, msgHTML) {
     var sig = $('signal');
     sig.setAttribute('data-estado', estado);
@@ -199,6 +260,7 @@
 
     if (!res.valido) {
       setSignal('nada', 'Revisa los campos marcados para ver el resultado.');
+      setVoice('', {});
       ['o-lote', 'o-lotemax', 'o-stops', 'o-obj'].forEach(function (id) { $(id).textContent = '–'; });
       $('o-lote-sub').textContent = '';
       $('o-alert').hidden = true;
@@ -238,6 +300,7 @@
       msg = 'Tu colchón de <strong>' + usd(res.colchon) + '</strong> aguanta <strong>' + res.stopsRestantes + ' stops</strong> de ' + usd(r) + ' ' + antesDe + '.';
     }
     setSignal(res.estado, msg);
+    setVoice(res.violada ? 'violada' : res.estado, { n: res.stopsRestantes, lim: cerca });
 
     // Lote
     var ins = CV.INSTRUMENTOS[raw.instrumento];
@@ -372,6 +435,11 @@
     }
   });
   form.addEventListener('submit', function (e) { e.preventDefault(); });
+
+  $('sig-voice-next').addEventListener('click', function () {
+    voiceIdx++;
+    render();
+  });
 
   var toastTimer;
   function toast(msg) {

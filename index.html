@@ -113,6 +113,7 @@
 <main id="main">
   <div class="wrap">
     <section class="hero" aria-labelledby="titulo">
+      <p class="kicker">Operas solo. No tienes que operar a ciegas.</p>
       <h1 id="titulo">Calculadora de drawdown y lotaje para tu cuenta fondeada</h1>
       <p class="lede">Pon tus números y mira cuánto colchón te queda antes del límite diario y del máximo, con qué lote entrar y si hoy conviene operar. Presets de FTMO, FundedNext y The5ers; todo es editable.</p>
     </section>
@@ -285,6 +286,7 @@
           <div>
             <p class="signal-title" id="sig-title">Puedes operar</p>
             <p class="signal-msg" id="sig-msg">Calculando…</p>
+            <p class="signal-voice" id="sig-voice" hidden><span class="voice-text" id="sig-voice-text"></span> <button type="button" class="voice-next" id="sig-voice-next" aria-label="Ver otra frase del compañero">Otra</button></p>
           </div>
         </div>
 
@@ -466,7 +468,7 @@
     </div>
   </section>
 
-  <section class="section" id="kit" aria-labelledby="h-kit">
+  <section class="section" id="kit" aria-labelledby="h-kit" data-sell>
     <div class="wrap">
       <div class="cta-band">
         <div>
